@@ -1,0 +1,14 @@
+<apex:page controller="GuideBookGetData">
+    <apex:form >
+        <apex:pageBlock title="Guidebook Request" >
+            <apex:pageBlockSection title="Please enter following Details" >
+                <apex:inputText label="Api Key" value="{!apiKey}"/>
+                <apex:inputText label="Object Name" value="{!QueryObject}"/>
+                <apex:commandButton value="Get Data From Guide book" action="{!GuideBookData}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock title="GuideBook Data" rendered="{!showData}">
+            {!resp}
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

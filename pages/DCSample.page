@@ -1,0 +1,12 @@
+<apex:page controller="DCsample">
+    <apex:form >
+        <apex:pageBlock title="Hello {!$User.FirstName}">
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Account Name"/>
+                <apex:inputField value="{!acc.name}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

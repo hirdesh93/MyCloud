@@ -1,0 +1,54 @@
+<apex:page standardController="Speaker__c" extensions="SpeakerControllerExtension">
+    
+    <apex:form >
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+       
+     <script>
+        $(document).ready(function() {
+    	            
+		});
+
+        function doValidation(){
+            if($('input[id$=firstname]').val()){
+                callSave();
+            }
+            else{
+                var firstchild = document.createElement('div');
+                firstchild.id = 'first';
+                firstchild.style.color = 'red';
+                firstchild.innerHTML = "Please Enter The Value";
+                $('input[id$=firstname]').attr('style','border-color : red');
+                if(!document.getElementById('first'))
+                $('input[id$=firstname]').parent().append(firstchild);
+            }
+            
+            if($('input[id$=lastname]').val()){
+                callSave();
+            }
+            else{
+                var lastchild = document.createElement('div');
+                lastchild.id = 'last';
+                lastchild.style.color = 'red';
+                lastchild.innerHTML = "Please Enter The Value";
+                $('input[id$=lastname]').attr('style','border-color : red');
+                if(!document.getElementById('last'))
+                $('input[id$=lastname]').parent().append(lastchild);
+            }
+        }
+        </script>
+        <apex:pageBlock title="Edit Speaker" >
+           <apex:pageBlockSection columns="1">
+               <apex:inputField value="{!Speaker__c.First_Name__c}" id="firstname"/>
+                <apex:inputField value="{!Speaker__c.Last_Name__c}" id="lastname"/>
+                <apex:inputField value="{!Speaker__c.Email__c}"/>
+                <apex:inputFile value="{!picture}" accept="image/*" />
+           </apex:pageBlockSection>
+           <apex:pageBlockButtons >
+               <apex:actionFunction action="{!save}" name="callSave"/>
+             <apex:commandButton value="Save" onclick="doValidation();return false;"/>
+           </apex:pageBlockButtons>
+        </apex:pageBlock>
+        {!errorMessage}
+    </apex:form>
+</apex:page>

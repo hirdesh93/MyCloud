@@ -1,0 +1,14 @@
+<apex:page controller="theController">
+<apex:form >
+<apex:tabPanel id="tabPanel" selectedTab="{!selectedTab}">
+  <apex:tab title="tab1" label="tab 1" id="tab1" disabled="{!istab1disabled}">
+    <apex:commandButton value="Next" action="{!enabletab2}" rerender="tabPanel"/>
+      <apex:inputText value="{!testfield}"/>
+  </apex:tab>
+  <apex:tab title="tab2" label="tab 2" id="tab2" disabled="{!istab2disabled}">
+    <apex:commandButton value="Previous" action="{!enabletab1}" rerender="tabPanel" />
+      <apex:inputText value="{!testfield2}"/>
+  </apex:tab>
+</apex:tabPanel>
+</apex:form>
+</apex:page>

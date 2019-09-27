@@ -1,0 +1,74 @@
+<apex:page standardController="Contact" recordSetVar="contacts" extensions="vfvalidate" sidebar="false">
+    <apex:form >
+        <apex:pageBlock title="Approval List">
+            <apex:pageMessages id="showPageMessage"></apex:pageMessages>
+            <apex:pageBlockTable value="{!contacts}" var="con">
+                <apex:column value="{!con.Id}" />
+                <apex:column value="{!con.salutation}"/>
+                <apex:column value="{!con.FirstName}"/>
+                <apex:column value="{!con.LastName}"/>
+                <apex:column headerValue="Action" >
+                    <label>
+                        <input type="radio" id='approve' name="optradio" value="Approve" onClick="setSelectedValues(this,'{!con.Id}','{!$Component.theHiddenInput}', '{!$Component.theHiddenInput2}')"/>
+                        Approve
+                    </label>
+                    <label>
+                        <input type="radio" id='reject' name="optradio" value="Reject" onClick="setSelectedValues(this,'{!con.Id}','{!$Component.theHiddenInput}', '{!$Component.theHiddenInput2}')"/>
+                        Reject
+                    </label>
+                    <apex:commandButton value="Save" onclick="checkRadioValues('{!con.Id}')" styleClass="sendbutton"  rerender="tstpopup,showPageMessage"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:panelGrid columns="5"> Page : 
+                <apex:commandLink action="{!first}">FIRST</apex:commandLink>
+                <apex:commandLink action="{!previous}">PREVIOUS</apex:commandLink>
+                <apex:commandLink action="{!next}">NEXT</apex:commandLink> 
+                <apex:commandLink action="{!last}">LAST</apex:commandLink>
+            </apex:panelGrid>
+        </apex:pageBlock>
+        <apex:inputHidden value="{!selectedRadioValue}" id="theHiddenInput"/>
+		<apex:inputHidden value="{!selectedContactId}" id="theHiddenInput2"/>
+		<apex:actionFunction name="callShowPopup" action="{!showPopup}" rerender="tstpopup,showPageMessage"/>            
+		<script>
+			var selectedCIdText ;
+			function setSelectedValues(t, contactId, hiddenInputId, hiddenInputId2){                                                                                                  
+				 document.getElementById(hiddenInputId).value = t.value;
+				 var hiddenInputValue = document.getElementById(hiddenInputId).value;
+				 console.log(hiddenInputValue);
+				 
+				 selectedCIdText = document.getElementById(contactId).innerText ;
+				 document.getElementById(hiddenInputId2).value = selectedCIdText;
+				 var hiddenInput2Value = document.getElementById(hiddenInputId2).value;
+				 console.log(hiddenInput2Value);                                                  
+			}
+			
+			function checkRadioValues(selectedContactId){                                                                                                  
+				 
+				 if(selectedCIdText == document.getElementById(selectedContactId).innerText)
+					 callShowPopup();
+				 else
+					 alert("Please select a corresponding radio button");                                                                    
+			}              
+		</script>
+
+		<apex:outputPanel id="tstpopup">
+		<apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopup}"/>
+			
+			<apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopup}">
+				<b><apex:outputLabel value="Reason for the Rejection" style="float:left"></apex:outputLabel></b><br/><br/>
+				<apex:inputTextarea value="{!rejectionResonText}" style="width:100%;min-height:80px;"/><br/><br/><br/>
+				<apex:commandButton styleClass="buttonSave" value="Save" action="{!saveRejectionReason}" rerender="tstpopup,checkArea,showPageMessage "/>
+				<apex:commandButton styleClass="buttonCancel" value="Cancel" action="{!closePopup}" rerender="tstpopup"/>
+			</apex:outputPanel>
+		</apex:outputPanel>
+		
+		<apex:outputPanel id="checkArea">
+			<apex:outputPanel id="showAfterCheck" rendered="{!checkRejectionText}">
+				<script>
+					alert('Please provide rejection reason.!!');
+							 
+				</script>
+			</apex:outputPanel>
+		</apex:outputPanel>                   
+    </apex:form>
+</apex:page>

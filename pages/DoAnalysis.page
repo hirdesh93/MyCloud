@@ -1,0 +1,30 @@
+<apex:page controller="DoAnalysisController">
+    <apex:form id="frm">
+        <apex:sectionHeader title="Field Tracking" subtitle="Analysis"/>
+        « <a href='{!url}'><font style="font-size:8pt">Back to Field Tracking</font></a><br/>
+        <br/>               
+        <apex:commandButton value="Begin Analysis" action="{!goAnalyze}" rendered="{!not(underway)}"/>
+        
+        <apex:pageBlock title="Job Status" id="jobStatus">        
+            <apex:pageBlockTable value="{!aaj}" var="j">
+                <apex:column value="{!j.status}"/>
+                <apex:column value="{!j.jobitemsprocessed}"/>
+                <apex:column value="{!j.totaljobitems}"/>
+                <apex:column value="{!j.numberoferrors}"/>
+                <apex:column value="{!j.extendedstatus}"/>
+            </apex:pageBlockTable>            
+            <apex:actionPoller interval="5" action="{!checkBatchStatus}" enabled="{!pollerBool}" reRender="jobStatus,frm,fieldstatus" status="act"/>    
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Object Fields Analysis" id="fieldstatus">        
+            <apex:pageBlockTable value="{!FieldList}" var="f">
+                <apex:column value="{!f.Name}"/>
+                <apex:column value="{!f.Field_API_Name__c}"/>
+                <apex:column value="{!f.Populated_On__c}"/>
+                <apex:column value="{!f.Populated_On_Percent__c}"/>
+                <apex:column value="{!f.Field_Length__c}"/>
+                <apex:column value="{!f.Type__c }"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>  
+    </apex:form>
+</apex:page>

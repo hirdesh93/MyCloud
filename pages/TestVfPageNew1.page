@@ -1,0 +1,3 @@
+<apex:page showHeader="false" showChat="false" sidebar="false" standardController="Account" recordSetVar="Accounts" >
+    
+</apex:page>

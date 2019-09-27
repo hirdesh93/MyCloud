@@ -1,0 +1,61 @@
+<apex:page Controller="OnlinePurchase">
+   <apex:actionStatus id="actStatusId" >
+                <apex:facet name="start">
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                <img src="{!URLFOR($Resource.Cursor_Windows_Vista)}" />
+            </div>
+            </apex:facet>
+            </apex:actionStatus>
+    
+ 
+    <apex:sectionHeader subtitle="Home" title="OnlinePurchase"/>
+    <apex:form id="frm">
+       <apex:pageBlock title="Search" id="abc">
+           Type Order Name :<apex:inputText value="{!input}" >
+            <apex:actionSupport action="{!show}" event="onkeyup" reRender="outputText"  />
+        </apex:inputText>
+            </apex:pageBlock>
+    <apex:pageBlock title="Data Information" id="pb">
+        <apex:pageBlockButtons >
+        <apex:commandButton value="Save" action="{!Create}" status="actStatusId" reRender="pb" />
+        <apex:commandButton value="Cancel" />
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection >
+            <apex:pageBlockTable value="{!onplist}" var="op" id="outputText">
+                <apex:column headerValue="Active">
+                <apex:actionRegion >
+		              <apex:outputField value="{!op.Active__c}">
+                	 	      <apex:inlineEditSupport event="ondblClick"  />
+		              </apex:outputField>
+		        </apex:actionRegion>  
+                </apex:column>
+                <apex:column headerValue="Purchase Order">
+                    <apex:outputLink target="_blank" value="/{!op.Id}">{!op.Name}</apex:outputLink>
+                </apex:column>  
+              <apex:column headerValue="PartyName">
+          		<apex:actionRegion >
+		              <apex:outputField value="{!op.PartyName__c}">
+                	 	      <apex:inlineEditSupport event="ondblClick"  />
+		              </apex:outputField>
+		        </apex:actionRegion>  
+		</apex:column>
+                
+                <apex:column headervalue="{!op.Order_Date__c}">
+                
+                </apex:column>
+                <apex:column value="{!op.Quantity__c}"/>
+                <apex:column value="{!op.Total_Amount__c}"/>
+                <apex:column value="{!op.Address__c}"/>
+                <apex:column value="{!op.Amount__c}"/>
+                <apex:column value="{!op.Product__c}"/>
+                
+                <apex:column value="{!op.Purchase_Order_Line_Items__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+       </apex:pageBlock>
+    </apex:form>
+   
+</apex:page>

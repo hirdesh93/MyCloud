@@ -1,0 +1,14 @@
+<apex:page standardController="Field_Tracking__c" extensions="RelatedListController">  
+    <apex:form id="frm" rendered="{!flag}">        
+        <apex:pageBlock title="Object Fields Analysis" id="fieldstatus">        
+            <apex:pageBlockTable value="{!FieldList}" var="f">
+                <apex:column value="{!f.Name}"/>
+                <apex:column value="{!f.Field_API_Name__c}"/>
+                <apex:column value="{!f.Populated_On__c}"/>
+                <apex:column value="{!f.Populated_On_Percent__c}"/>
+                <apex:column value="{!f.Field_Length__c}"/>
+                <apex:column value="{!f.Type__c }"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>  
+    </apex:form>
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:page >
+  <h1>Let’s start chatting...</h1>
+  <br />
+  Click the big button to start a chat.
+  <br />
+  <!--Button Code-->
+  <!--Deployment Code-->
+</apex:page>

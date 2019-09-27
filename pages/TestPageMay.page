@@ -1,0 +1,17 @@
+<apex:page >
+    <apex:form >
+    <script language="javascript" type="text/javascript">
+        function SelectSingleCheckbox(Chkid) {
+            var chkbid = document.getElementById(Chkid);
+            var chkList = document.getElementsByTagName("input");
+            for (i = 0; i < chkList.length; i++) {
+                if (chkList[i].type == "checkbox" && chkList[i].id != chkbid.id) {
+                    chkList[i].checked = false;
+                }
+            }
+        }
+</script>
+     <apex:InputCheckBox ID="CheckBox1"  OnClick="javascript:SelectSingleCheckbox(this.id)"/>
+        <apex:InputCheckBox ID="CheckBox2"  OnClick="javascript:SelectSingleCheckbox(this.id)"/>
+</apex:form>
+</apex:page>

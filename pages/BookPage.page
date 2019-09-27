@@ -1,0 +1,21 @@
+<apex:page controller="BookPageClass">
+    <apex:sectionHeader title="Book" subtitle="Home" description="This Is Override Page"/>
+    <apex:form >
+        <apex:pageBlock title="Book Information" tabStyle="Account" mode="edit" >
+            <apex:pageBlockSection columns="1" showHeader="true" >
+            	<apex:inputField value="{!bcc.name}" required="true"/>
+                <apex:inputField value="{!bcc.Book_Category__c}"/>
+                <apex:inputField value="{!bcc.Author__c}" />
+                <apex:inputField value="{!bcc.Price__c}"/>
+                <apex:inputField value="{!bcc.Description__c}"/>
+                <apex:inputField value="{!bcc.Date_Of_Publishing__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+            <apex:commandButton value="Save" action="{!Create}"/>
+            <apex:commandButton value="Cancel"/>
+            </apex:pageBlockButtons>
+            
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

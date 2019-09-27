@@ -1,0 +1,13 @@
+<apex:page standardController="Account" tabStyle="Account">
+    <apex:form >
+    <apex:sectionHeader title="Home" subtitle="AccountHome"/>
+    <apex:pageBlock title="AccountInformation" mode="edit">
+        <apex:pageBlockSection collapsible="false" columns="2" title="General Information" >
+            <apex:inputField value="{!account.name}" required="true"/>
+            <apex:inputField value="{!account.Phone}"/>
+            <apex:inputField value="{!account.Industry}"/>
+            <apex:inputField value="{!account.Type}"/>
+        </apex:pageBlockSection>
+       </apex:pageBlock>
+        </apex:form>
+ </apex:page>

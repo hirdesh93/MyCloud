@@ -1,0 +1,12 @@
+<apex:page standardController="Account">
+    <script>
+    	$(document).ready(function()
+                          {
+                              var a = "{!Account.Industry}";
+                              if(a== "Banking")
+                              {
+                                  document.body.style.backgroundImage="url('{$resource.vfimagetest})";
+                               }
+                              });
+    </script>
+</apex:page>

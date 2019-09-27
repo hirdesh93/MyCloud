@@ -1,0 +1,51 @@
+<apex:page >
+    <head>
+        <style>
+        .scroll {
+            border: 0;
+            border-collapse: collapse;
+        }
+    
+    .scroll tr {
+        display: flex;
+    }
+    
+    .scroll td {
+        padding: 2px;
+        flex: 1 auto;
+        border: 1px solid #aaa;
+        width: 1px;
+        word-wrap: break;
+    }
+    .scroll thead tr:after {
+        // content: '';
+        overflow-y: scroll;
+        visibility: hidden;
+        height: 0;
+    }
+    .scroll tbody tr:after {
+        content: '';
+        overflow-y: scroll;
+        visibility: hidden;
+    } 
+    
+    .scroll thead th {
+        flex: 1 auto;
+        display: block;
+        border: 1px solid gray;
+        height:80px;
+    }
+    .scroll tbody {
+        display: block;
+        width: 100%;
+        overflow-y: auto;
+        height: 400px;
+    }
+    
+    </style>
+    </head> 
+    
+    $(function() {
+        $("#myTable").tablesorter({ sortList: [[0,0], [1,0]] });
+    });
+</apex:page>

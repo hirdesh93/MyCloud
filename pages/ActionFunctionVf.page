@@ -1,0 +1,30 @@
+<apex:page controller="ActionFunEx">
+<apex:form >
+<apex:actionFunction name="AFcall" action="{!AFcall}" rerender="out" status="myStatus"/>
+</apex:form>
+
+<apex:outputPanel id="out">
+<apex:outputText value="Hello" />
+<apex:actionStatus startText="(requesting server please wait…)"  id="myStatus">
+<apex:facet name="stop">{!username}</apex:facet>
+</apex:actionStatus>
+</apex:outputPanel>
+
+<script>window.setTimeout(AFcall,9000)</script>
+
+<p>
+    <apex:outputText value="Clicked?{!TempVal}" id="showTempVal" />
+ </p>
+
+<apex:outputPanel onclick="Clickme('Dk')" styleClass="btn"> 
+  Hello Fella! 
+ </apex:outputPanel>
+
+<apex:form >
+
+<apex:actionFunction action="{!ActionMethod}" name="Clickme" rerender="showtempval">
+<apex:param name="firstParam" assignTo="{!TempVal}" value="" />
+</apex:actionFunction>
+
+</apex:form>
+</apex:page>

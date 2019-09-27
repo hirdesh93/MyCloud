@@ -1,0 +1,33 @@
+<apex:page controller="DynamicAccount">
+    <apex:form >
+        <apex:pageBlock >
+            Type Account Name :<apex:inputText value="{!input}" >
+            <apex:actionSupport action="{!showdata}" event="onkeyup" reRender="outputText" />
+            </apex:inputText>
+        </apex:pageBlock>
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!accList}" var="a" id="outputText" >
+                    <apex:column value="{!a.Name}"/>
+                    <apex:column value="{!a.id}"/>
+                    <apex:column value="{!a.phone}"/>
+                    <apex:column >
+                        <apex:commandButton value="view" action="{!showTable}" style="font-weight:normal;color:blue" id="test">
+                            <apex:param name="recidval" value="{!a.id}" assignTo="{!aid}" />
+                        </apex:commandButton>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Account Details" rendered="test">
+                <apex:pageBlockTable value="{!accNewList}" var="b">
+                    <apex:outputText >
+                        Name	:  {!b.name}
+                        Phone	:  {!b.phone}
+                        Id		:  {!b.id}
+                    </apex:outputText>
+                </apex:pageBlockTable>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

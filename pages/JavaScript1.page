@@ -1,0 +1,63 @@
+<apex:page id="thePage">
+    <!-- A simple function for changing the font. -->
+    <script>
+    function changeFont(input, textid) {
+        if(input.checked) {
+            document.getElementById(textid).style.fontWeight = "bold";
+        }
+        else {
+            document.getElementById(textid).style.fontWeight = "normal";
+        }
+    }
+    </script>
+    
+    <!-- This outputPanel calls the function, passing in the
+checkbox itself, and the DOM ID of the target component. -->
+    <apex:outputPanel layout="block">
+        <label for="CheckBox">Click this box to change text font:</label>
+        <input id="checkbox" type="checkbox"
+               onclick="changeFont(this,'{!$Component.Panel}');"/>
+    </apex:outputPanel>
+    
+    <!-- This outputPanel is the target, and contains 
+text that will be changed. -->
+    <apex:outputPanel id="Panel" layout="block">
+        Change my font weight!
+    </apex:outputPanel>
+    <html>
+        <head>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script>
+                $(document).ready(function(){
+                $("p").click(function(){
+                    $(this).hide();
+                });
+            });
+            </script>
+            
+            <script>
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("p").hide();
+    });
+    $("#show").click(function(){
+        $("p").show();
+    });
+});
+</script>
+            <body>
+
+<p>If you click on the "Hide" button, I will disappear.</p>
+
+<button id="hide">Hide</button>
+<button id="show">Show</button>
+
+</body>
+        </head>
+        <body>
+            
+            <p>Click on this paragraph.</p>
+            
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,12 @@
+<apex:page controller="LogoClass">
+    <apex:form >
+        <apex:actionFunction name="Test" action="{!showLogo}" reRender="Imglogo"/>
+        <apex:pageBlock >
+           <apex:pageBlockSection >
+                <apex:inputText id="companyURLID" value="{!Url}" label="Website"  onchange="Test()"/>
+                <apex:image style="margin-left:32%" value="https://logo.clearbit.com/{!ImgUrl}" id="Imglogo" width="80px" />
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

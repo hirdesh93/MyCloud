@@ -1,0 +1,19 @@
+<apex:page controller="GuidebookPostData">
+    <apex:form >
+        <apex:pageBlock title="Guidebook Request" >
+            <apex:pageBlockSection title="Please enter following Details" collapsible="true">
+                
+                <apex:inputText label="Object Name" value="{!QueryObject}"/>
+                <apex:inputTextarea label="Body" value="{!guidebody}"/><br/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Post Data To Guide book" action="{!GuideBookData}" />
+                <apex:commandButton value="Update Data To Guide book" action="{!GuideBookDataUpdate}" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="GuideBook Data" rendered="{!showData}">
+            {!resp}
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

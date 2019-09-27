@@ -1,0 +1,24 @@
+<apex:page controller="LinkedinIntegration" sidebar="false">
+    <apex:form >
+    <apex:pageBlock title="Webserver">
+        <apex:pageBlockButtons location="Top">
+        <apex:commandButton value="GetCode" action="{!getcodeData}"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1">
+        		<apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Redirect URI" />
+                    <apex:outputText value="{!uri}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Client Id" />
+                    <apex:inputText size="40" value="{!clientId}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="State" />
+                    <apex:inputText size="40" value="{!state}" />
+                </apex:pageBlockSectionItem>
+          
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

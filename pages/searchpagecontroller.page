@@ -1,0 +1,9 @@
+<apex:page controller="SearchPageController">
+    <apex:form >
+        <apex:repeat value="{!searchFields}" var="field">
+            <apex:outputText value="{!field}"/>
+            <apex:inputField value="{!anAccount[field]}"/>
+            <br/>
+        </apex:repeat>
+    </apex:form>
+</apex:page>

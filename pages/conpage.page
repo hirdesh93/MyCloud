@@ -1,0 +1,30 @@
+<apex:page standardController="Contact" extensions="contactEditPageExtension">
+    <apex:form >
+        <apex:pageBlock title="Contact Edit" id="test">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!saveRecord}" />
+              <!--  <apex:commandButton value="Save & New" /> !-->
+                <apex:commandButton value="Cancel" action="{!Cancel}"/>
+             </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Contact Information">
+                <apex:inputField value="{!contact.FirstName}" required="true"/>
+                <apex:inputField value="{!contact.LastName}"/> 
+                <apex:inputField value="{!contact.AccountId}"/>
+                <apex:inputField value="{!contact.phone}"/>
+            </apex:pageBlockSection>
+            <apex:commandLink value="Copy Mailing Address to Other Address" style="float:right;" action="{!test}" reRender="test"/>
+            <apex:pageBlockSection title="Address Information"  >
+                <apex:inputField value="{!contact.MailingCountry}"/>
+                    <apex:inputField value="{!contact.otherCountry}"/> 
+                    <apex:inputField value="{!contact.MailingStreet}"/>
+                    <apex:inputField value="{!contact.otherStreet}"/>  
+                    <apex:inputField value="{!contact.MailingState}"/>
+                    <apex:inputField value="{!contact.otherState}"/> 
+                	<apex:inputField value="{!contact.MailingPostalCode}"/> 
+                	<apex:inputField value="{!contact.OtherPostalCode}"/> 
+                	<apex:inputField value="{!contact.MailingCity}"/> 
+                	<apex:inputField value="{!contact.OtherCity}"/> 
+              </apex:pageBlockSection>
+          </apex:pageBlock>
+    </apex:form>
+</apex:page>

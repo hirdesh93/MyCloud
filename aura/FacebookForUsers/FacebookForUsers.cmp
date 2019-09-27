@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable" >
+    <iframe width="100%" height="100%" style="border: 1px solid" src="https://wordpress.com//" />
+</aura:component>

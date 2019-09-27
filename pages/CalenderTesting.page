@@ -1,0 +1,32 @@
+<apex:page controller="CalenderTestingController">
+<apex:form >
+<script src="{!$Resource.momentminjs}"></script>
+    <link href="{!$Resource.fullCalendarCSS}" rel="stylesheet" />  
+    
+ <!--  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.2/fullcalendar.min.css" rel="stylesheet" />   -->
+
+    <link href="{!$Resource.fullCalendarPrintCSS}" rel="stylesheet" media="print" />  
+ <!--   <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.2/fullcalendar.print.css" rel="stylesheet" />  -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.2/fullcalendar.min.js"></script>  
+    <script src="{!$Resource.momentminjs}"></script>
+  
+    <script>
+
+        //We need to wrap everything in a doc.ready function so that the code fires after the DOM is loaded
+
+        $(document).ready(function() { 
+         $('#calendar').fullCalendar({
+        });
+
+    });
+
+</script>
+
+<div id='calendar'></div>
+</apex:form>
+</apex:page>

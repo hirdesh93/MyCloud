@@ -1,0 +1,25 @@
+<apex:page standardController="Field_Tracking__c" recordSetVar="opportunities" 
+              tabStyle="Opportunity"
+    sidebar="false">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages />
+            <apex:pageBlock >
+                <apex:panelGrid columns="2">
+                    <apex:outputLabel value="View:"/>
+                    <apex:selectList value="{!filterId}" size="1">
+                        <apex:actionSupport event="onchange" rerender="opp_table"/>
+                        <apex:selectOptions value="{!listviewoptions}"/>
+                    </apex:selectList>
+                </apex:panelGrid>
+            </apex:pageBlock>
+
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!Field_Tracking__c}" var="ft" id="opp_table">
+                <apex:column value="{!ft.name}"/>
+              </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

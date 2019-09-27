@@ -1,0 +1,29 @@
+<apex:page controller="ActionPollerPageController" id="pg">
+    
+    <apex:sectionHeader title="Action Poller" subtitle="Fetch the last created Contact for every 10 sec"/>
+    <apex:form id="fm">
+        <apex:pageBlock >
+            <apex:pageBlockTable value="{!Contacts}" var="c">
+                <apex:column value="{!c.firstname}"/>
+                <apex:column value="{!c.LastName}"/>
+                <apex:column value="{!c.Account.Name}"/> 
+                <apex:column value="{!c.Phone}"/>
+                <apex:column value="{!c.Email}"/>
+                <apex:column value="{!c.CreatedDate}"/>
+            </apex:pageBlockTable>
+            
+            <apex:actionPoller action="{!latestAccount}" reRender="pg:fm" interval="10" status="st"/> 
+            <apex:actionStatus id="st">
+                <apex:facet name="start">
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black; ">
+                        &nbsp;
+                    </div>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 20% 50% ">
+                        <img src="/img/loading32.gif" width="25" height="25" />
+                    </div>
+                </apex:facet>
+            </apex:actionStatus> 
+            
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

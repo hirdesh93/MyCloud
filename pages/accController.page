@@ -1,0 +1,17 @@
+<apex:page Controller="accController" >
+    <apex:form >
+        <apex:pageBlock title="Display Account Details: " mode="Edit">
+            <apex:pageBlockSection >
+                <apex:outputLabel value="Account Name: " />
+                <apex:selectlist value="{!accid}" size="1" >
+                    <apex:selectOptions value="{!accountnames}" />
+                    <apex:actionSupport action="{!getDetails}" event="onchange" rerender="display"/>
+                </apex:selectlist>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="display" title="Account Details" >
+                <apex:outputField value="{!SelectedAcc.Name}"/>
+                <apex:outputField value="{!SelectedAcc.Phone}"/>
+            </apex:pageBlockSection>    
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

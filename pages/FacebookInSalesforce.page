@@ -1,0 +1,17 @@
+<apex:page controller="FacebookRestApi" title="Read Data From Facebook">
+    <apex:pageBlock title="Application Details">
+        <apex:outputText value="{!id1}">Id</apex:outputText><br/>
+        <apex:outputText value="{!name1}">Name</apex:outputText><br/>
+        <apex:outputText value="{!website1}">Website</apex:outputText><br/>
+        <apex:outputText value="{!fancount1}">Fan </apex:outputText>
+        <html>
+<body>
+
+    <embed src="www.facebook.com"/>
+
+</body>
+</html>
+    
+
+    </apex:pageBlock>
+</apex:page>

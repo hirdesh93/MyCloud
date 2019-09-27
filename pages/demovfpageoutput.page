@@ -1,0 +1,17 @@
+<apex:page standardcontroller="Coloured_Text__c">
+<apex:includeScript value="{!URLFOR($Resource.jscolor_1_4_0, 'jscolor/jscolor.js')}" />
+  <apex:pageBlock title="Colour Picker View">
+     <apex:pageBlockSection >
+        <apex:outputField value="{!Coloured_Text__c.Name}" />
+       <apex:pageBlockSectionItem />
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Field 1" />
+         <apex:outputText style="color: #{!Coloured_Text__c.Colour_1__c}" value="{!Coloured_Text__c.Field_1__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Field 2" />
+         <apex:outputText style="color: #{!Coloured_Text__c.Colour_2__c}" value="{!Coloured_Text__c.Field_2__c}" />
+       </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+</apex:page>

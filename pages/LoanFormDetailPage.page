@@ -1,0 +1,38 @@
+<apex:page standardController="Customer_Loan_Form__c" extensions="LoanFormDetailPageController" lightningStylesheets="true">
+    
+        <apex:form >
+            <apex:pageBlock >
+                <apex:pageBlockSection columns="1">
+                    <table>
+                    <tr>
+                        <td>Customer Photo
+                            <div>
+                                <tr>
+                                    <td>
+                                        <apex:image url="/servlet/servlet.FileDownload?file={!fileId}"/>
+                                    </td>
+                                </tr> 
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Name}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Recovery_Date__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Name__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Father_s_Husband_Name__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Address__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.PAN_Card__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Adhar_Card__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Mobile_No__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Annual_Income__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Email_ID__c}"/>
+                                <apex:outputField value="{!Customer_Loan_Form__c.Loan_Amount__c}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    
+     </table>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+</apex:page>

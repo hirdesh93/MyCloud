@@ -1,0 +1,14 @@
+<apex:page standardController="Opportunity" >
+  <apex:form >
+    <apex:pageBlock id="thePageBlock">
+        <apex:actionRegion >
+<apex:pageBlockSection >
+        <apex:inputField value="{!Opportunity.Probability}" id="prob"/>
+        <apex:inputField value="{!Opportunity.StageName}" id="st"> 
+    <apex:actionSupport event="onchange" reRender="prob" immediate="true"/>
+    </apex:inputField>
+        </apex:pageBlockSection>
+</apex:actionRegion>
+      </apex:pageBlock>
+    </apex:form>
+</apex:page>

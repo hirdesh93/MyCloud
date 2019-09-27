@@ -1,0 +1,13 @@
+<apex:page controller="Recordtab" >
+    <apex:form >
+        <apex:pageblock id="member" title="Field Track Records">
+            <apex:pageblockTable value="{!mem}" var="m">
+                <apex:column headerValue="Name">
+                    <apex:outputLink value="/{!m.Id}">{!m.name}</apex:outputLink>
+                </apex:column>
+                <apex:column Value="{!m.Object_Name__c}"></apex:column>
+                <apex:column Value="{!m.Batch_Processed__c}"></apex:column>
+             </apex:pageblockTable>          
+        </apex:pageblock>           
+    </apex:form>
+</apex:page>

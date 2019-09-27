@@ -1,0 +1,17 @@
+<aura:component controller="UserLoginController">
+    <aura:attribute name="usernameLabel" type="String" required="false" default="Username"/>
+    <aura:attribute name="passwordLabel" type="String" required="false" default="Password"/>
+    <aura:attribute name="loginButtonLabel" type="String" required="false" default="Log in"/>
+    <div id="sfdc_username_container" class="sfdc">
+        <span id="sfdc_user" class="login-icon" data-icon="a"></span>
+        <ui:inputText value="" aura:id="username" placeholder="{!v.usernameLabel}"  class="input sfdc_usernameinput sfdc" label="{!v.usernameLabel}" labelClass="assistiveText"/>
+    </div>
+    
+    <div id="sfdc_password_container" class="sfdc">
+        <span id="sfdc_lock" class="login-icon sfdc" data-icon="c"></span>
+        <ui:inputSecret value="" aura:id="password" placeholder="{!v.passwordLabel}"  class="input sfdc_passwordinput sfdc" label="{!v.passwordLabel}" labelClass="assistiveText"/>
+    </div>
+    <div class="sfdc">
+        <ui:button aura:id="submitButton" label="{!v.loginButtonLabel}" press="{!c.handleLogin}" class="sfdc_button"/>
+    </div>
+</aura:component>

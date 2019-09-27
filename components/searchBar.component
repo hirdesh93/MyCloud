@@ -1,0 +1,28 @@
+<apex:component controller="SearchBarController">
+    <apex:form >
+    <apex:pageBlock title="Search" mode="Edit" tabStyle="Account" >
+            <apex:pageBlockSection columns="1" title="Enter Value">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Account Name"/>
+                    <apex:inputText value="{!Name}"/>
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Industry"/>
+                    <apex:inputText Value="{!industry}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Search" action="{!searchresult}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!bcc}" var="b" rendered="{!NOT(ISNULL(bcc))}">
+                    <apex:column value="{!b.Id}"/>
+                    <apex:column >
+                        <apex:outputLink value="https://myorgtestdomain-dev-ed.my.salesforce.com/{!b.id}">{!b.name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!b.Industry}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:component>

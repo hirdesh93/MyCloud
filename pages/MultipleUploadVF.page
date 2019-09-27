@@ -1,0 +1,15 @@
+<apex:page standardController="Account" extensions="MultipleUploadController">
+    <apex:form >
+        <apex:pageBlock title="Upload Multiple Attachment to Object">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Upload"  action="{!SaveAttachments}" reRender="pbs"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages id="MSG"/>
+            <apex:pageBlockSection id="pbs">
+                <apex:repeat value="{!allFileList}" var="AFL">
+                    <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" />
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

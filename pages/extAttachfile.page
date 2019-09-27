@@ -1,0 +1,14 @@
+<apex:page standardController="Contact" extensions="extattachfile">
+      <apex:form >
+          <apex:pageBlock title="Submit File">
+             <apex:pageMessages />
+              <apex:pageBlockButtons >
+                  <apex:commandButton value="Save" action="{!saveApplicant}"/>
+              </apex:pageBlockButtons>
+              <apex:pageBlockSection >
+                  <apex:inputField value="{!objApplicant.LastName}"/>
+                  <apex:inputfile value="{!objAttachment.body}" filename="{!objAttachment.Name}"></apex:inputfile>
+              </apex:pageBlockSection>
+          </apex:pageBlock>
+      </apex:form>
+  </apex:page>

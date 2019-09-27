@@ -1,0 +1,16 @@
+<apex:page controller="FetchRelatedContact">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:outputText value="Select Account    "/>  <apex:selectList value="{!selVal}" size="1">
+            <apex:selectOptions value="{!AllAccount}"/>
+            </apex:selectList>
+            <br/>
+            <apex:commandButton value="Show" action="{!showRelatedContacts}"/>
+            <br/>
+            <apex:pageBlockTable var="cont" value="{!contacts}">
+                <apex:column value="{!cont.name}"/>
+                <apex:column value="{!cont.email}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,33 @@
+<apex:page standardController="Field_Tracking__c" extensions="DescibeDemoController">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageblockbuttons location="top" >
+                <!-- <apex:commandButton value="Analyse" action="{!showFields}"/> !-->
+                <apex:commandButton value="Save" action="{!saveRecords}"/>
+                <apex:commandButton value="Cancel" action="{!Cancel}"/>
+            </apex:pageblockbuttons>
+            
+            <apex:pageblocksection >    
+                <apex:inputtext label="Give your Field Track a name (e.g. 'Accounts','Contacts','Opportunities',etc)" value="{!tripName}" required="true" /><br/>
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel value="Enter the API Name of the Object you want to analyze"></apex:outputLabel> 
+                    <apex:selectList value="{!selectedObject}" size="1" required="true">
+                        <apex:selectOptions value="{!ListObjectName}"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageblocksection>
+            <apex:pageblocksection rendered="{!if(listField.size > 0 ,true,false)}">
+                <c:Batch_Progress numberOfJobs2="1" batchComponentLabel2="Batch Progress"/>
+            </apex:pageblocksection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="result" title="Field Detail for {!selectedObject}" rendered="{!if(listField.size > 0 ,true,false)}"   >
+            <apex:pageBlockTable value="{!listField}" var="field" rendered="{!if(listField.size > 0 ,true,false)}"> 
+                <apex:column value="{!field.fieldName }" headerValue="Name" />
+                <apex:column value="{!field.fieldAPIName }"  headerValue="API Name"/>
+                <apex:column value="{!field.fieldTypeName }"  headerValue="Type"/>
+                <apex:column value="{!field.fieldlength }"  headerValue="Length"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,46 @@
+<apex:page controller="Filter2">
+    <apex:form >
+    <apex:outputPanel >
+    PageSize:{!Controller.PageSize}    PageNumber:{!Controller.pageNumber}
+    </apex:outputPanel>
+    <apex:pageBlock title="Book">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="NEXT" action="{!controller.Next}" />
+            <apex:commandButton value="PREVIOUS" action="{!controller.Previous}" rendered="{!controller.hasPrevious}" />
+            <apex:commandButton value="LAST" action="{!controller.Last}"/>
+            <apex:commandButton value="FIRST" action="{!controller.First}" rendered="{!controller.hasPrevious}" />
+            <apex:commandButton value="Search" action="{!search}"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockTable value="{!list}" var="b">
+                <apex:column value="{!b.Id}"/>
+                <apex:column value="{!b.name}"/>
+                <apex:column value="{!b.Author__r.name}"/>
+                <apex:column value="{!b.Book_category__r.name}"/>
+            </apex:pageBlockTable>
+          <apex:pageBlockSection columns="1" title="Enter Value">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Book Name"/>
+                    <apex:inputText value="{!Name}"/>
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Author Name"/>
+                    <apex:inputText value="{!AuthorName}"/>
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Book Category"/>
+                     <apex:inputText value="{!BookCategory}"/>
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Price"/>
+                    <apex:inputText value="{!price}"/>
+                </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+       <apex:pageBlockTable value="{!bcc}" var="a">
+                <apex:column value="{!a.Id}"/>
+                <apex:column value="{!a.name}"/>
+                <apex:column value="{!a.Author__r.name}"/>
+                <apex:column value="{!a.Book_category__r.name}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        </apex:form>
+</apex:page>

@@ -1,0 +1,9 @@
+<apex:page standardController="Contact" showHeader="false" setup="false">
+    <apex:form >
+    	<apex:pageBlock >
+            <apex:outputText value="{!Contact.AccountId}"> AccountId :</apex:outputText><br/>
+            <apex:outputText value="{!Contact.Account.Name}">Account Name :</apex:outputText><br/>
+            <apex:outputText value="{!Contact.Account.Industry}">Account Industry :</apex:outputText>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

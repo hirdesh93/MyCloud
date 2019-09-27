@@ -1,0 +1,15 @@
+<apex:page standardController="Author__c">
+    <apex:pageBlock title="Fields in Proper Names">
+        <apex:pageBlockTable value="{!$ObjectType.Author__c.FieldSets.TestFieldSet}" var="f">
+            <apex:column value="{!f}">
+                <apex:facet name="header">Name</apex:facet>
+            </apex:column> 
+            <apex:column value="{!f.Label}">
+                <apex:facet name="header">Label</apex:facet>
+            </apex:column> 
+            <apex:column value="{!f.Type}" >
+                <apex:facet name="header">Data Type</apex:facet>
+            </apex:column> 
+        </apex:pageBlockTable> 
+    </apex:pageBlock> 
+</apex:page>

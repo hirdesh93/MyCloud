@@ -1,0 +1,42 @@
+<apex:page controller="AccountContact">
+    <apex:form >
+        <apex:pageBlock >
+            PageSize:{!Controller.PageSize}    PageNumber:{!Controller.pageNumber}
+            <apex:pageBlockButtons >
+                <apex:commandButton value="<< First" action="{!controller.First}" rendered="{!controller.hasPrevious}" disabled="" />
+                <apex:commandButton value="< Previous" action="{!controller.Previous}" rendered="{!controller.hasPrevious}" />
+                <apex:commandButton value="Next >" action="{!controller.Next}" rendered="{!controller.hasNext}"/>
+                <apex:commandButton value=" Last >>" action="{!controller.Last}"  rendered="{!controller.hasNext}"/>
+                <apex:commandButton value="Search" action="{!search}"/> 
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!list}" var="a"  >
+                <apex:column value="{!a.Id}"/>
+                <apex:column headerValue="AccountName">
+                    <apex:outputLink target="_blank" value="/{!a.Id}">{!a.Name}</apex:outputLink>
+                </apex:column> 
+            </apex:pageBlockTable>
+            <apex:pageBlockSection >
+                <apex:inputText value="{!Name}" label="Account Name"/> 
+                <apex:pageBlockTable value="{!acc}" var="b" rendered="{!NOT(ISNULL(acc))}">
+                    <apex:column value="{!b.Id}"/>
+                    <apex:column headerValue="AccountName">
+                        <apex:outputLink target="_blank" value="/{!b.Id}">{!b.Name}</apex:outputLink>
+                    </apex:column> 
+                    <apex:column headerValue="Contacts">
+                        <apex:pageBlockTable value="{!con}" var="c" >
+                            <apex:column value="{!c.FirstName}"/>
+                            <apex:column value="{!c.LastName}"/>
+                            <apex:column >
+                                <apex:commandLink value="Edit" action="/{!c.id}/e?retURL=/apex/{!$CurrentPage.Name}"
+                                                  style="font-weight:normal;color:blue"></apex:commandLink>&nbsp;|&nbsp;
+                                <apex:commandLink value="Del" action="{!deletecon}" style="font-weight:normal;color:blue" >
+                                    <apex:param name="recidval" value="{!c.id}" assignTo="{!crid}" />
+                                </apex:commandLink>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:column>
+                </apex:pageBlockTable> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

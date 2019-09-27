@@ -1,0 +1,24 @@
+<apex:page showHeader="true" sidebar="true" controller="HeapSize_Controller">
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+        j$(document).ready(function() {
+            getData();
+        });
+
+        function getData() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.HeapSize_Controller.generateRandomObject}',
+                    function(result, event){
+                        if (event.status) {
+                            console.log('======= List :: '+ result);
+                        }
+                        else {
+                            console.log('======= Error Message :: '+ event.message);
+                        }
+                    },
+                {escape: true,buffer: false}
+            );
+        }
+  </script>
+</apex:page>

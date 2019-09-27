@@ -1,0 +1,24 @@
+<apex:page standardController="Opportunity" recordSetVar="opportunities" 
+              tabStyle="Opportunity"
+    sidebar="false">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages />
+            <apex:pageBlock >
+                <apex:panelGrid columns="2">
+                    <apex:outputLabel value="View:"/>
+                    <apex:selectList value="{!filterId}" size="1">
+                        <apex:actionSupport event="onchange"/>
+                        <apex:selectOptions value="{!listviewoptions}"/>
+                    </apex:selectList>
+                </apex:panelGrid>
+            </apex:pageBlock>
+
+            <apex:pageBlockButtons >
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!Opportunity}" var="ft" id="opp_table">
+                <apex:column value="{!ft.name}"/>
+              </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

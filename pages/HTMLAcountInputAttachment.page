@@ -1,0 +1,138 @@
+<apex:page id="pgid" extensions="InputFileUsingHtmlJavaScript" standardController="Account">
+    <apex:form id="frm">
+    <link href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />   
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.js"></script>
+    <apex:commandButton value="New Attachment" id="NewAttachment" styleClass="btn-primary"  style="margin-left:31%;" onclick="openPopup();return false;" />
+        <div id="Modalx" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-body">                   
+                    <apex:outputPanel >
+                    <div class="col-sm-12" style="height:450px">
+                        
+                        <div class="col-sm-4" style="margin-top:8%">
+                            Select File<span style="color:red">*</span>
+                        </div>
+                        <div class="col-sm-8" id="fileparent">
+                            <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file" style="margin-top: 13%;margin-right: 33%;" onchange="validateFile();return false;" />
+                        </div>
+                        
+                        <div class="col-sm-4" style="margin-top:8%">
+                            File Name<span style="color:red">*</span>
+                        </div>
+                        <div class="col-sm-8" id="nameparent">
+                            <apex:inputText value="{!attachment.name}" id="fileName" style="margin-top:13%;" styleClass="form-control" onblur="validateFileName();return false;"/>                            
+                        </div>                  
+                        
+                        
+                        <div class="col-sm-4" style="margin-top:8%">
+                            Description
+                        </div>
+                        <div class="col-sm-8">                            
+                            <apex:inputTextarea value="{!attachment.description}" id="description" styleClass="form-control" style="margin-top: 10%;resize:none"/>
+                        </div>
+                        <div class="col-sm-12">
+                        <div class="col-sm-6" style="margin-top: 10%;">
+                            <apex:actionFunction action="{!upload}" name="uploadTheFile" />
+                            <apex:commandButton value="Save" id="upload" style="margin-left:64%" onclick="uploadFile();return false;" styleClass="btn primary" />
+                        </div>
+                        <div class="col-sm-6" style="margin-top: 10%;">                            
+                            <apex:commandButton value="Cancel" id="cancelpopup" style="margin-left:-74%" onclick="hidePopup();return false;" styleClass="btn primary"/>
+                        </div>
+                        </div>
+                    </div>
+                                                            
+                        <table style="width:100%;border-collapse: initial;padding-top: 15px;">
+                         
+                        </table>                        
+                    </apex:outputPanel>  
+                </div>
+            </div>
+        </div>
+         <script>
+         function openPopup(){
+                var modal = document.getElementById('Modalx');
+                modal.style.display = "block";            
+            }
+            
+            function hidePopup(){
+                $('input[id$=recordtyperadio]').val('');
+                var modal = document.getElementById('Modalx');
+                modal.style.display = "none";
+            }
+        function uploadFile(){
+                if(validateUploadingPopup()){
+                     $('input[id$=upload]').attr('disabled','true');     //   document.getElementById('j_id0:j_id265:upload').setAttribute('disabled','true');
+                     $('input[id$=upload]').attr('value','Saving...');   //document.getElementById('j_id0:j_id265:upload').setAttribute('value','Saving...');
+                     $('input[id$=cancelpopup]').attr('disabled','true');    //document.getElementById('j_id0:j_id265:cancelpopup').setAttribute('disabled','true');
+                     $('input[id$=cancelpopup]').attr('value','Saving...');
+                     uploadTheFile();
+                }
+            }
+            function validateUploadingPopup(){
+                var name = validateFileName();
+                var file = validateFile();
+                if(name && file){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            function validateFileName(){
+                var nameparent = document.getElementById('nameparent');  
+                var nameval= $('input[id$=fileName]').val().trim();                
+                if(!nameval){
+                    if(!document.getElementById('nameerror')){                          
+                        var iDiv = document.createElement('div');
+                        iDiv.id='nameerror';
+                        iDiv.innerHTML= '<span style="color:red">File name cannot be blank.</span>';
+                        iDiv.className = 'FieldErrorMsg';
+                        nameparent.appendChild(iDiv);
+                        document.getElementById('nameerror').setAttribute('style','margin-left:-56%');
+                        $('input[id$=fileName]').css('border-color','red');
+                    }
+                    return false;
+                }      
+                if(document.getElementById('nameerror')){
+                    document.getElementById('nameerror').remove();
+                    $('input[id$=fileName]').css('border-color','green');
+                }
+                return true; 
+            }
+            function validateFile(){
+                var fileparent = document.getElementById('fileparent');  
+                var fileval= $('input[id$=file]').val() ;  //document.getElementById("j_id0:j_id265:file").value;                
+                if(fileval && !$('input[id$=fileName]').val()){
+                   $('input[id$=fileName]').val(fileval.substring(fileval.lastIndexOf('\\')+1,fileval.length));
+                } 
+                if(!fileval){
+                    if(!document.getElementById('fileerror')){                          
+                        var iDiv = document.createElement('div');
+                        iDiv.id='fileerror';
+                        iDiv.innerHTML= '<span style="color:red">Please choose a file.</span>';
+                        iDiv.className = 'FieldErrorMsg';
+                        fileparent.appendChild(iDiv);
+                        document.getElementById('fileerror').setAttribute('style','margin-left:-66%');
+                        $('file[id$=file]').css('border-color','red');
+                    }
+                    return false;
+                }      
+                if(document.getElementById('fileerror')){
+                    document.getElementById('fileerror').remove();
+                    $('file[id$=file]').css('border-color','green');
+                }  
+                return true; 
+            }
+            window.onclick = function(event) {
+                if (event.target.id == 'Modalx') {
+                    hidePopup();
+                }
+            }  
+            
+        </script>
+    </apex:form>
+    
+</apex:page>

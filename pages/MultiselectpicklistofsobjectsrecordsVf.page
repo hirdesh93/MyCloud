@@ -1,0 +1,77 @@
+<apex:page controller="Multiselectpicklistofsobjectsrecords" sidebar="false">
+   <apex:stylesheet value="/resource/SLDS0102/assets/styles/salesforce-lightning-design-system-ltng.css"/>
+    <apex:form id="theForm">
+         <apex:actionStatus id="statusid">
+            <apex:facet name="start">
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+            </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <!--<apex:actionfunction action="{!SelecFields}" name="pick"/>-->
+        <apex:actionfunction action="{!deleterecords}" name="DeleteRecord"/> 
+        <apex:pageBlock title="Select Object and Fields">
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:pageBlockSection title="Select an Object" collapsible="false" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select an object:"></apex:outputLabel>
+                    <apex:selectList value="{!objectName}" size="1" multiselect="false">
+                        <apex:selectOptions value="{!selectedobject}">
+                            
+                        </apex:selectOptions>
+                        <apex:actionSupport action="{!function}" event="onchange" />  
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>            
+                <apex:outputPanel id="fieldsPanel" rendered="{!PickilistFlag}">
+                    <table width="100%" style="margin-left:120px"><tr><td valign="top" width="9%">       
+                        <apex:outputLabel value="Select Fields:" rendered="{!PickilistFlag}"> </apex:outputLabel></td><td width="20%">
+                        <apex:selectList value="{!fields}" multiselect="true" size="10" onchange="pick();">
+                            <apex:selectOptions value="{!lsps}">
+                            </apex:selectOptions>
+                            <apex:actionSupport />
+                        </apex:selectList></td> 
+                        <td valign="center" width="10%">
+                            <br/><br/><br/><br/>
+                            <apex:commandButton value="Add" style="width:100px" reRender="abc" action="{!add}" status="statusid"/><br/>
+                            <apex:commandButton value="Remove" style="width:100px" reRender="abc" action="{!remove}" status="statusid"/> <br/><br/><br/><br/><br/><br/>
+                            <!-- <apex:commandButton action="{!SelecFields}" value="SelectedFields"/> -->
+                            <apex:commandButton action="{!selectedMethod}" value="SelectedFields" status="statusid"/>
+                        </td>              
+                        <td>
+                            <apex:selectList value="{!removelistoffields}" multiselect="true" size="3" style="width:180px;height:180px" id="abc">
+                                <apex:selectOptions value="{!selectedfields}"></apex:selectOptions>
+                            </apex:selectList>                 
+                        </td></tr></table></apex:outputPanel>
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection rendered="{!ListFlag}" columns="1" id="PbList" >
+                <apex:pageBlockTable value="{!sObjList}" var="FLd">
+                    
+                    <apex:column style="width:30px"><apex:commandLink value="Delete" action="{!DeleteRecords}" reRender="PbList" status="statusid"><apex:param name="accId" value="{!FLd.id}"/></apex:commandLink></apex:column>
+                    <apex:repeat value="{!removelistoffields}" var="fds">
+                        <apex:column headerValue="{!fds}"> 
+                            <apex:outputField value="{!FLd[fds]}"/>
+                        </apex:column>                     
+                    </apex:repeat> 
+                    <apex:inlineEditSupport />             
+                </apex:pageBlockTable>
+                
+                <apex:outputPanel >
+                    <center>
+                        
+                        <apex:commandButton Action="{!Firstpage}" value="First" disabled="{!disabledfirpre}" status="statusId"/>
+                        <apex:commandButton Action="{!previouspage}" value="<<<previous" disabled="{!disabledfirpre}"/> 
+                        <apex:commandButton Action="{!nextpage}" value="next>>>" disabled="{!disablednextlst}"/> 
+                        <apex:commandButton Action="{!lastpage}" value="last"  disabled="{!disablednextlst}"/>&nbsp;&nbsp;
+                        {!pagecount} of {!Totalsize} 
+                        <apex:commandButton action="{!saved}" value="Save"/>
+                    </center>
+                </apex:outputPanel>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

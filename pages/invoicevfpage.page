@@ -1,0 +1,50 @@
+<apex:page standardController="Contact">
+    <apex:form >
+        <br/><br/>
+    <apex:image value="{!($Resource.NewGalaxy)}" style="margin-Left:15px;" height="auto" width="150"/>
+        <div style="float:right;font:20px;margin-right:290px">            <b style="font-size:18px;">INVOICE</b> <br/>
+            <apex:outputText value="{0,date,MM/dd/yy}" style="font-size:18px;"> <b style="font-size:17px;font-weight:normal;">INVOICE DATE :</b> <apex:param value="{!NOW()}"/> </apex:outputText><br/>
+            <apex:outputText value="{0,date,MMddyy-hss}" style="font-size:18px;"> <b style="font-size:17px;font-weight:normal;">INVOICE NUMBER :</b> <apex:param value="{!CONTACT.CREATEDDATE}"/> </apex:outputText><br/>
+            <b style="font-size:18px;font-weight:normal;">Tax ID: 0023</b>
+        </div><br/><br/><br/><br/><br/>
+        
+    <b style="font-size:17px;font-weight:normal;margin-left:15px;">Billed To: (INSERT NAME OF COMPANY FROM ACCOUNT RECORD)</b>  <br/><br/><br/> 
+    <table border="1" cellpadding="0" cellspacing="0">  
+            <tr style="height:65px;background-color:#A4C7FA;">
+                <th style="margin:5px;padding:5px;width:400px;">{!Contact.Name}</th>
+                <th style="width:400px;"></th>
+            </tr>
+         
+        
+        <tr style="height:65px;">
+                <td style="margin:5px;padding:5px;">Event</td>
+                <td style="margin:5px;padding:5px;">
+                    <apex:outputText value="${0,number,#,##0.00}">
+                                <apex:param value="{!ROUND(Contact.Amount__c,0)}" />
+                            </apex:outputText>
+                    </td>
+        </tr>
+        <tr style="height:65px;">
+                <td style="margin:5px;padding:5px;">Agency Commission Due</td>
+                <td style="margin:5px;padding:5px;">
+                    <apex:outputText value="{0,number,#,##0}%">
+                                <apex:param value="{!ROUND(Contact.Commision__c,0)}" />
+                            </apex:outputText>
+                    </td>
+        </tr>
+        
+        <tr style="height:65px;">
+                <td style="margin:5px;padding:5px;">TOTAL DUE</td>
+                <td style="margin:5px;padding:5px;">
+                    <apex:outputText value="${0,number,#,##0.00}">
+                                <apex:param value="{!ROUND(Contact.Total__c,0)}" />
+                            </apex:outputText>
+                    </td>
+            </tr>
+    </table>
+        <br/>
+        <p>
+            Make checks payable to Galaxy Events. For questions please contact Cynthia Reynolds, Billing Coordinator, Galaxy Events at (p) 315-472-9111 x230 (f) 315-472-1888 (m) 269-271-7536 or <br/> email: cynthia@galaxyeventscompany.com.
+        </p>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,17 @@
+<apex:page >
+    <script type="text/javascript">
+    jQuery(document).ready(function() {            
+   $('input').prop('required', true);   
+}); 
+    </script>
+    <apex:form >
+        <apex:actionFunction name="validateInApex"  rerender="someSection" status="loadingStatus"/>
+    
+        <apex:inputText label="Name" id="fname"/>
+        <apex:commandButton value="Submit" />
+    </apex:form>
+    <!--  <form name="myForm"  onsubmit="return validateForm()" method="post">
+Name: <input type="text" name="fname"/>
+<input type="submit" value="Submit"/>
+</form> -->
+</apex:page>

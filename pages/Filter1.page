@@ -1,0 +1,96 @@
+<apex:page controller="Filter1" showHeader="false" sidebar="false">
+    <apex:form >
+        <apex:pageBlock title="Search" mode="Edit" tabStyle="Account">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="{!URLFOR($Resource.jQuery)}"></script> 
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
+    <script>
+		$(window).on('load', function(){           
+            
+                var acheck =localStorage.getItem('chekop');
+                var name1 =localStorage.getItem('name');
+                document.getElementById("{!$Component.nameid}").value=name1;
+            	if(acheck == 'true'){
+            	document.getElementById("{!$Component.enableSaveOnEnter}").checked=true;
+                }else{
+                document.getElementById("{!$Component.enableSaveOnEnter}").checked=false;
+                }
+           
+              
+                var acheck1 =localStorage.getItem('chekop1');
+            	if(acheck1 == 'true'){
+            	document.getElementById("{!$Component.enableSaveOnEnter1}").checked=true;
+                }else{
+                document.getElementById("{!$Component.enableSaveOnEnter1}").checked=false;
+                }
+        
+                var acheck2 =localStorage.getItem('chekop2');
+            	if(acheck2 == 'true'){
+            	document.getElementById("{!$Component.enableSaveOnEnter2}").checked=true;
+                }else{
+                document.getElementById("{!$Component.enableSaveOnEnter2}").checked=false;
+                }
+            
+           
+                var acheck3 =localStorage.getItem('chekop3');
+            	if(acheck3 == 'true'){
+            	document.getElementById("{!$Component.enableSaveOnEnter3}").checked=true;
+                }else{
+                document.getElementById("{!$Component.enableSaveOnEnter3}").checked=false;
+                }
+        });
+		
+		 function toggleSaveOnEnter(){
+
+			var check=document.getElementById("{!$Component.enableSaveOnEnter}").checked;
+            var nameval=document.getElementById("{!$Component.nameid}").value;
+                          
+			 localStorage.setItem("chekop", check);
+             localStorage.setItem("name", nameval);
+             
+             var check1=document.getElementById("{!$Component.enableSaveOnEnter1}").checked;
+             localStorage.setItem("chekop1", check1);
+             
+             var check2=document.getElementById("{!$Component.enableSaveOnEnter2}").checked;
+             localStorage.setItem("chekop2", check2);
+             
+             var check3=document.getElementById("{!$Component.enableSaveOnEnter3}").checked;
+             localStorage.setItem("chekop3", check3);
+        }
+        </script>
+    		<td>
+                    <apex:outputLabel value="Book Name"/>
+                    <apex:inputCheckbox value="{!NameFlag}" id="enableSaveOnEnter" onclick="toggleSaveOnEnter()"/> 
+                    <apex:inputText value="{!Name}" id="nameid"/>
+            </td>        
+            <td>        
+                    <apex:outputLabel value="Author Name"/>
+                    <apex:inputcheckbox value="{!Authorflag }" id="enableSaveOnEnter1" onclick="toggleSaveOnEnter()"/>
+                    <apex:inputText value="{!AuthorName}"/>
+                    
+            </td>
+            <td>
+                    <apex:outputLabel value="Book Category"/>
+                   <apex:inputcheckbox value="{!Bookcategoryflag}" id="enableSaveOnEnter2" onclick="toggleSaveOnEnter()"/>
+                    <apex:inputText value="{!BookCategory}"/>
+              </td>      
+             <td>       
+                    <apex:outputLabel value="Price"/>
+                     <apex:inputcheckbox value="{!Bookpriceflag }" id="enableSaveOnEnter3" onclick="toggleSaveOnEnter()"/>
+                    <apex:inputText value="{!price}"/>
+                    
+              </td>      
+                <apex:commandButton value="Search" action="{!search}"/>
+                
+                <apex:pageBlockTable value="{!bcc}" var="b" rendered="{!NOT(ISNULL(bcc))}">
+                    <apex:column value="{!b.Id}">
+                    </apex:column><apex:column value="{!b.name}"/>
+                     <apex:column value="{!b.Author__r.name}"/>
+                     <apex:column value="{!b.Book_category__r.name}"/>
+                    <apex:column value="{!b.Price__c}"/>
+                </apex:pageBlockTable>
+       </apex:pageblock> 
+    </apex:form>
+    
+</apex:page>

@@ -1,0 +1,40 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="CreateCandidateRecord">
+ <!--including lightning styles-->
+    <!-- Preparation of lead object with fields-->
+    <aura:attribute name="Candidate" type="Candidate__c"  default="{'sobjectType':'Candidate__c',
+                                                           'Hirdesh93Org__First_Name__c':'',
+                                                            'Hirdesh93Org__Last_Name__c':'',
+                                                          'Hirdesh93Org__Email__c':'',
+                                                        'Hirdesh93Org__SSN__c':''}"/>  
+   <div class="slds">
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="FirstName">First Name</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="FirstName" class="slds-input" value="{!v.Candidate.Hirdesh93Org__First_Name__c}" placeholder="First Name" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="LastName">Last Name</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="LastName" class="slds-input" value="{!v.Candidate.Hirdesh93Org__Last_Name__c}" placeholder="Last Name" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="Email">Email</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="Email" class="slds-input" value="{!v.Candidate.Hirdesh93Org__Email__c}" placeholder="Email" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="SSN">SSN</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="SSN" class="slds-input" value="{!v.Candidate.Hirdesh93Org__SSN__c}" placeholder="SSN" />
+          </div>
+        </div>
+       <div class="slds-form-element">        
+          <div class="slds-form-element__control">
+            <ui:button label="Save" press="{!c.save}"/>
+          </div>
+        </div>
+ </div>
+</aura:component>

@@ -1,0 +1,18 @@
+<apex:page controller="javascripttoapex">
+ <apex:form >
+ <script>
+function myFunction() {
+paraFunction(document.getElementById("myText").value, document.getElementById("myText2").value);
+   
+}
+</script>
+ First Name: <input type="text" id="myText" value="{!text}"/>
+Second Name: <input type="text" id="myText2" value="{!text2}"/>
+
+<apex:actionFunction name="paraFunction" action="{!values}" rerender="view">   
+            <apex:param assignTo="{!text}" name="name1" value="" />
+            <apex:param assignTo="{!text2}" name="name2" value="" />
+        </apex:actionFunction>
+<button onclick="myFunction()">Try it</button>
+ </apex:form>
+</apex:page>

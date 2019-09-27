@@ -1,0 +1,31 @@
+<apex:page controller="AccountInlineEditCLs">
+    <apex:form >
+        <apex:pageBlock mode="inlineEdit" >
+            <!-- calling getAccounts() methods in pageblock table -->
+            <apex:actionSupport event="ondblclick" action="{!Fetchdta}"/> 
+            <apex:PageBlockTable value="{!accounts}" var="a" id="Test">
+                <apex:inlineEditSupport />
+                <apex:column Headervalue="Action">
+                    <apex:commandbutton value="save" action="{!save1}" rerender="Test" id="saveButton">
+                    <apex:param name="AccountId" value="{!a.id}" assignTo="{!accId}"/>
+                    </apex:commandbutton>
+                 </apex:column>   
+                <apex:column Headervalue="Account Name">
+                    <apex:outputfield value="{!a.name}">
+                    <apex:param name="AccountId" value="{!a.id}" assignTo="{!accId}"/>
+                    </apex:outputfield>
+                </apex:column>
+                <apex:column headervalue="Industry">
+                    <apex:outputfield value="{!a.industry}">
+                    <apex:param name="AccountId" value="{!a.id}" assignTo="{!accId}"/>
+                    </apex:outputfield>
+                </apex:column>
+                <apex:column >
+                    <apex:outputfield value="{!a.type}">
+                    <apex:param name="AccountId" value="{!a.id}" assignTo="{!accId}"/>
+                    </apex:outputfield>
+                </apex:column>
+            </apex:PageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

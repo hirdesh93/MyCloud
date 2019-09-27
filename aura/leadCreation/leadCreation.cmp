@@ -1,0 +1,40 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="LightningLeadCreatecls">
+ <!--including lightning styles-->
+    <!-- Preparation of lead object with fields-->
+    <aura:attribute name="leadObj" type="Lead"  default="{'sobjectType':'lead',
+                                                           'FirstName':'',
+                                                            'LastName':'',
+                                                          'Company':'',
+                                                        'Email':''}"/>  
+   <div class="slds">
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="FirstName">First Name</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="FirstName" class="slds-input" value="{!v.leadObj.FirstName}" placeholder="First Name" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="LastName">Last Name</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="LastName" class="slds-input" value="{!v.leadObj.LastName}" placeholder="Last Name" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="Company">Company</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="Company" class="slds-input" value="{!v.leadObj.Company}" placeholder="Company" />
+          </div>
+        </div>
+       <div class="slds-form-element">
+          <label class="slds-form-element__label" for="Email">Email</label>
+          <div class="slds-form-element__control">
+            <ui:inputText aura:id="Email" class="slds-input" value="{!v.leadObj.Email}" placeholder="Email" />
+          </div>
+        </div>
+       <div class="slds-form-element">        
+          <div class="slds-form-element__control">
+            <ui:button label="Save" press="{!c.save}"/>
+          </div>
+        </div>
+ </div>
+</aura:component>

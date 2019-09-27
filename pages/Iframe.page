@@ -1,0 +1,3 @@
+<apex:page sidebar="false"  showHeader="false">
+    <apex:iframe src="https://myorgtestdomain-dev-ed--c.ap4.visual.force.com/apex/ContactReport" id="theFrame"  frameborder="true" width="80%" scrolling="true" />
+</apex:page>

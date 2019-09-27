@@ -1,0 +1,42 @@
+<apex:page standardController="Account" recordSetVar="records" id="thePage"> 
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID) {
+            var inputCheckbox = document.getElementsByTagName("input");
+            for(var i=0; i<inputCheckbox.length; i++) {
+                if(inputCheckbox[i].id.indexOf(receivedInputID)!=-1) {
+                    inputCheckbox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+    <apex:form id="theForm"> 
+        <apex:pageBlock id="thePageBlock"> 
+            <apex:pageBlockTable value="{!records}" var="record" id="thePageBlockTable"> 
+                <apex:column >
+                <apex:inputCheckbox onclick="selectAllCheckboxes" />
+                   <apex:facet name="header">Click</apex:facet> 
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Name}" id="AccountNameDOM" /> 
+                    <apex:facet name="header">Name</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Type}" id="AccountTypeDOM" /> 
+                    <apex:facet name="header">Type</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Industry}" 
+                        id="AccountIndustryDOM" />  
+                        <apex:facet name="header">Industry</apex:facet>
+                </apex:column>
+                <apex:inlineEditSupport event="ondblClick" 
+                        showOnEdit="saveButton,cancelButton" hideOnEdit="editButton" /> 
+            </apex:pageBlockTable> 
+            <apex:pageBlockButtons > 
+                <apex:commandButton value="Edit" action="{!save}" id="editButton" />
+                <apex:commandButton value="Save" action="{!save}" id="saveButton" />
+                <apex:commandButton value="Cancel" action="{!cancel}" id="cancelButton" />
+            </apex:pageBlockButtons> 
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

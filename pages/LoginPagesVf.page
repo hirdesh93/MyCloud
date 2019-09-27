@@ -1,0 +1,16 @@
+<apex:page controller="LoginPages" showHeader="false" sidebar="false" standardStylesheets="true">
+    <apex:Pagemessages id="msg"/>
+    <apex:form >
+    
+        <p ><b>Login Page</b><br /></p>
+        <apex:panelGrid columns="2" style="margin-top:1em;">
+            <p><b>UserName</b><br />
+                <apex:inputText required="true" id="username" value="{!username}"/>
+            </p>
+            <p><b>Password</b><br />
+                <apex:inputSecret id="password" value="{!password}"/>
+            </p>
+            <apex:commandButton action="{!registerUser}" value="Login" id="save"/>
+        </apex:panelGrid>
+    </apex:form>
+</apex:page>

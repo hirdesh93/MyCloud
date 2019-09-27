@@ -1,0 +1,7 @@
+<!-- Page: -->
+<apex:page controller="dataListCon">
+    <apex:dataTable value="{!accounts}" var="account">
+        <apex:column value="{!account.Name}"/>
+        <apex:column value="{!account.Id}"/>
+    </apex:dataTable>
+</apex:page>

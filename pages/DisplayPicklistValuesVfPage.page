@@ -1,0 +1,9 @@
+<apex:page controller="DisplayPickListValues">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+            <apex:outputText value="{!TypeOptions}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

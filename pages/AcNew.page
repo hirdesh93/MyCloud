@@ -1,0 +1,29 @@
+<apex:page id="page1" standardController="Account" recordSetVar="accounts" tabstyle="account" sidebar="false" >
+    <apex:pageBlock id="block1" >
+        <apex:repeat id="repeat1" value="{!accounts}" var="a">
+            <apex:pageBlockSection columns="1" id="section"  title="{!a.name}"  collapsible="true" >             
+                <apex:outputText value="{!a.BillingCity}"></apex:outputText>
+                <apex:outputText value="{!a.phone}"></apex:outputText>
+                <apex:outputText value="{!a.type}"></apex:outputText>              
+                <apex:relatedList list="Contacts" subject="{!a.Id}" />
+            </apex:pageBlockSection>         
+        </apex:repeat>      
+    </apex:pageBlock>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <script type="text/javascript">
+    j$ = jQuery.noConflict();
+    j$(document).ready(function() {
+        alert('collapse');
+        collapse();
+    });
+    
+    function collapse()
+    {
+        elements =j$("[id^='img_page1:block1:repeat1:']");     
+        elements.each(function()
+                      {                        
+                          twistSection(this);                    
+                      });
+    }
+    </script>
+</apex:page>

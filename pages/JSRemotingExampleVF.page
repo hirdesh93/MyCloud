@@ -1,0 +1,39 @@
+<apex:page controller="JsRemotingExample">
+    <script type="text/javascript">
+    function textFunc() 
+    {
+        var name = document.getElementById('n1').value; 
+        
+        if(name.length == 0)
+            alert('Please Enter a Value');
+        else {
+            JsRemotingExample.showText( name, 
+                                       function(result, event)
+                                       {
+                                           if (event.status) 
+                                           {
+                                               // This is the way to get VF tag id to map result returned from call back function parameter result
+                                               
+                                               document.getElementById("{!$Component.pb.pbs.pbsi.nameid}").innerHTML = result
+                                               
+                                           } 
+                                           else if (result.type === 'exception') 
+                                               alert("Exception caught");
+                                               else 
+                                                   alert("Exception caught");
+                                           
+                                       }); }
+    }
+    </script>
+    Name :<input id="n1" type="text" />
+    <button onclick="textFunc()">Get Text value from Controller method</button>
+    
+    <apex:pageBlock id="pb">
+        <apex:pageBlockSection id="pbs">
+            <apex:pageBlockSectionItem id="pbsi">
+                <apex:outputText id="nameid"/>
+            </apex:pageBlockSectionItem>
+            
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,31 @@
+<aura:component controller="testLightning" implements="force:lightningQuickAction,force:hasRecordId,flexipage:availableForRecordHome" access="global">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+     <aura:attribute name="AccName" type="opportunity" />
+    <table>
+    	<tr>
+            <td>
+            	<label>Opp Name</label>
+            </td>
+        	<td>
+            	<ui:inputText class="slds-input"  value="{!v.AccName.Name}" required="true" maxLength="4" /> 
+            </td>
+        </tr>
+        <tr>
+        	<td>
+            	<label>Account Amount</label>
+            </td>
+        	<td>
+            	<ui:inputText class="slds-input"  value="{!v.AccName.Account.Name}" required="true" maxLength="4" /> 
+            </td>
+        </tr>
+        <tr>
+        	<td>
+            	<label>Account Name</label>
+            </td>
+        	<td>
+            	<ui:inputText class="slds-input"  value="{!v.AccName.Amount}" required="true" maxLength="4" /> 
+            </td>
+        </tr>
+    </table>
+    
+</aura:component>

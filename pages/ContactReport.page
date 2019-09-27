@@ -1,0 +1,1301 @@
+<apex:page controller="ContactReportController" lightningStylesheets="true" sidebar="false" showHeader="false">
+<script>
+        var lineId = 0;
+        var lastResearchLine = 0;
+        var cellId = 0;
+        var borderColor = '3px solid #44afff';
+        var isTable = false;
+        var browser;
+        var browser2;
+        var useHotkeys = false;
+        var clearLastRow = false;
+        var analysisRemoved = [];
+        var analysisRemovedIndex = 0;
+        var enableSaveOnEnter = 1;
+        var researchDone = true;
+        var researchQueue = [];
+        
+        $(window).on('load', function(){
+            if (localStorage.getItem('useHotkeys') == null || localStorage.getItem('useHotkeys') == undefined)
+            {
+                useHotkeys = false;
+                localStorage.setItem('useHotkeys', JSON.stringify(useHotkeys));
+            }
+            else
+                useHotkeys = JSON.parse(localStorage.getItem('useHotkeys'));
+            $('#enableHotkeys').prop('checked', useHotkeys);
+            
+            if (localStorage.getItem('enableSaveOnEnter') == null || localStorage.getItem('enableSaveOnEnter') == undefined)
+            {
+                enableSaveOnEnter = true;
+                localStorage.setItem('enableSaveOnEnter', JSON.stringify(enableSaveOnEnter));
+            }
+            else
+                enableSaveOnEnter = JSON.parse(localStorage.getItem('enableSaveOnEnter'));
+            $('#enableSaveOnEnter').prop('checked', enableSaveOnEnter);
+        });
+        /*
+        function saveBackup(){
+            let memArr = []
+            $('.dataRow').each(function(){
+                sku = $(this).find('.dataCell:eq(2) a:last').text()
+                lowest = $(this).find('.dataCell:eq(14) input:first').val()
+                memArr.push({'sku':sku,'lowest':lowest})
+            })
+            localStorage.setItem('backupMemory',JSON.stringify(memArr))
+        }
+        
+        function loadBackup(){
+            if (localStorage.getItem('backupMemory') != null || localStorage.getItem('backupMemory') != undefined){
+                let memArr = JSON.parse(localStorage.getItem('backupMemory'))
+                $('.dataRow').each(function(){
+                    let sku = $(this).find('.dataCell:eq(2) a:last').text()
+                    let elem = memArr.find((e) => e.sku == sku)
+                    if (elem != undefined){
+                        $(this).find('.dataCell:eq(14) input:first').val(elem.lowest)
+                    }
+                })
+            }
+            else 
+                alert('No Memory found!');
+        }
+        */
+        function toggleHotkeys(){
+            useHotkeys = !useHotkeys;
+            $('#enableHotkeys').prop('checked', useHotkeys);
+            localStorage.setItem('useHotkeys', JSON.stringify(useHotkeys));
+        }
+        
+        function toggleSaveOnEnter(){
+            enableSaveOnEnter = !enableSaveOnEnter;
+            $('#enableSaveOnEnter').prop('checked', enableSaveOnEnter);
+            localStorage.setItem('enableSaveOnEnter', JSON.stringify(enableSaveOnEnter));
+        }
+        
+        document.addEventListener('click', function(event){
+            var el = event.target;    
+            document.getElementsByClassName('dataRow')[lineId].style.border = "";
+            if (el.tagName == 'TD' && el.parentNode.className.indexOf('dataRow') != -1){
+                lineId = el.parentNode.rowIndex - 1;
+                cellId = el.cellIndex;
+                isTable = true;
+            }
+            else if (el.parentNode.tagName == 'TD' && el.parentNode.parentNode.className.indexOf('dataRow') != -1){
+                lineId = el.parentNode.parentNode.rowIndex - 1;
+                cellId = el.parentNode.cellIndex;
+                isTable = true;
+            }
+                else if (el.parentNode.parentNode.tagName == 'TD' && el.parentNode.parentNode.parentNode.className.indexOf('dataRow') != -1){
+                    lineId = el.parentNode.parentNode.parentNode.rowIndex - 1;
+                    cellId = el.parentNode.parentNode.cellIndex;
+                    isTable = true;
+                }
+                    else if (el.parentNode.parentNode.parentNode.tagName == 'TD' && el.parentNode.parentNode.parentNode.parentNode.className.indexOf('dataRow') != -1){
+                        lineId = el.parentNode.parentNode.parentNode.parentNode.rowIndex - 1;
+                        cellId = el.parentNode.parentNode.parentNode.cellIndex;
+                        isTable = true;
+                    }
+                        else{
+                            isTable = false;
+                        }
+            if (isTable)
+                document.getElementsByClassName('dataRow')[lineId].style.border = borderColor;
+        }); 
+        
+        document.addEventListener('keydown',function(event){
+            var k = event.key.toUpperCase();
+            var re = /[A-Z ]/;
+            var re2 = /[A-EG-NP-Z]/;    
+            if (!event.altKey && !event.ctrlKey && !event.metakey && !event.repeat && k.length == 1)
+            {
+                if (k.search(re) != -1 && cellId != 18)
+                {
+                    if (isTable && useHotkeys)
+                    {
+                        switch(k)
+                        {                        
+                            case "A":
+                                approve(lineId);
+                                break;
+                            case "D":
+                                remove(lineId);
+                                break;
+                            case "S":
+                                getAmazon(browser, lineId);
+                                break;
+                            case "E":
+                                openAmazon(browser);
+                                break;  
+                            case "C":
+                                match(lineId, 1);
+                                break;
+                            case "F":
+                                next(false);
+                                break;
+                            case "R":
+                                resetQueue();
+                                break;
+                            case "G":
+                                next(true);
+                                break;
+                        }
+                    }
+                    event.preventDefault();
+                }
+                else if (cellId == 18 && k.search(re2) != -1)
+                    event.preventDefault();
+            }
+            else if (k == 'ENTER' && !event.repeat && enableSaveOnEnter)
+            {
+                console.log("test")
+                MyAction();
+            }
+        });
+        
+        //functions for SF
+        function approve(lineId){
+            $('.dataRow:eq(' + lineId + ') .dataCell:eq(21)')[0].click()
+            if ($('.dataRow:eq(' + lineId + ') .dataCell:eq(0) input').prop('checked') == true){
+                $('.dataRow:eq(' + lineId + ') .dataCell:eq(0)')[0].click()
+            }
+        }
+        
+        function remove(lineId){
+            $('.dataRow:eq(' + lineId + ') .dataCell:eq(0)')[0].click()
+            $('.dataRow:eq(' + lineId + ') .dataCell:eq(19) input:last').val(0);
+            if ($('.dataRow:eq(' + lineId + ') .dataCell:eq(21) input').prop('checked') == true){
+                $('.dataRow:eq(' + lineId + ') .dataCell:eq(21)')[0].click()
+            }
+        }
+        
+        function checkAdjustPrice(k){
+            var hasB2C = $('.dataRow:eq(' + k + ') .dataCell:eq(3) a:last').text() != ""
+            var newVal = 0;
+            var oldVal = 0;
+            var override = 0;
+            var result = [];
+            
+            if (hasB2C){
+                var storePrice = parseFloat($('.dataRow:eq(' + k + ') .dataCell:eq(5) input:first').val());
+                if (isNaN(storePrice)) storePrice = 0;
+                oldVal = storePrice;
+                
+                var amznLowestPrice = parseFloat($('.dataRow:eq(' + k + ') .dataCell:eq(5) span:first').text().replace('$',''));
+                if (isNaN(amznLowestPrice)) amznLowestPrice = 0;
+                
+                var lowestCurrent = parseFloat($('.dataRow:eq(' + k + ') .dataCell:eq(14) input:first').val());
+                if (isNaN(lowestCurrent)) lowestCurrent = 0;
+                
+                var lowestFBA = parseFloat($('.dataRow:eq(' + k + ') .dataCell:eq(5) span:eq(1)').text().replace('$',''));
+                if (isNaN(lowestFBA)) lowestFBA = 0;
+                
+                var casePrice = 0;
+                if ($('.dataRow:eq(' + k + ') .dataCell:eq(27) input:first').prop("checked") != true){
+                    var parent = getParentInfo(k);
+                    
+                    if (parent.element != "")
+                    {
+                        var caseQty = $('.dataRow:eq(' + k + ') .dataCell:eq(18) input').val();
+                        if (caseQty.indexOf('of') != -1){
+                            caseQty = parseFloat(caseQty.replace(/.+of\s/g,''));
+                            
+                            if (!isNaN(caseQty))
+                            {
+                                casePrice = parent.lowestCurrent * (caseQty * 0.9 + 0.1);
+                                casePrice = round(casePrice);
+                            }
+                        }
+                    }
+                }
+                
+                if (casePrice == 0)
+                {
+                    if (storePrice != lowestCurrent){
+                        newVal = lowestCurrent;
+                    }
+                }
+                else if (storePrice < lowestCurrent || amznLowestPrice > lowestCurrent)
+                {
+                    if (storePrice != lowestCurrent){
+                        newVal = lowestCurrent;
+                    }
+                }
+                else if (casePrice > 0 && storePrice != casePrice)
+                {
+                    if (storePrice != casePrice){
+                        newVal = casePrice;
+                    }
+                }
+                
+                if (newVal < lowestFBA){
+                    override = 1;
+                }          
+                
+            }
+            result.push(newVal);
+            result.push(oldVal);
+            result.push(override);
+            return result;
+        }
+        
+        function match(lineId, fx = 0)
+        {
+            var prices = checkAdjustPrice(lineId);
+            
+            if (prices[0] != 0){
+                prices[0] = prices[0].toFixed(2);
+                $('.dataRow:eq(' + lineId + ')').css('height','220px');
+                if (prices[2] == 1) $('.dataRow:eq(' + lineId + ') .dataCell:eq(4) input').prop('checked', true)
+                $('.dataRow:eq(' + lineId + ') .dataCell:eq(5)').css('border','4px solid rgb(68, 175, 253)');
+                $('.dataRow:eq(' + lineId + ') .dataCell:eq(5) input:first').val(prices[0]).trigger('onchange');
+                $('.dataRow:eq(' + lineId + ') .dataCell:eq(5) input:eq(1)').val('').trigger('onchange');
+                compare(lineId, 5,'storePrice', prices[0].toString(), prices[1].toString(), 'alt')
+                
+                if (fx == 1){
+                    var a = 1.0;
+                    var fadeTime = setInterval(function(){
+                        $('.dataRow:eq(' + lineId + ') .dataCell:eq(5)').css('border','4px solid rgba(68, 175, 253, ' + a + ')')
+                        a -= 0.1;
+                        if (a <= 0)
+                        {
+                            $('.dataRow:eq(' + lineId + ') .dataCell:eq(5)').css('border','')
+                            clearInterval(fadeTime);
+                        }
+                    }, 80);
+                }
+            }  
+        }
+        
+        function adjustStorePrice()
+        {
+            $(".dataRow").each(function(k){
+                match(k)
+            });
+        } 
+        
+        function next(fromAnalysis = false){
+            if (!fromAnalysis)
+            {
+                var $table = $('.dataRow').slice(lineId+1);
+            }
+            else
+            {
+                var $table = $(analysisRemoved).slice(analysisRemovedIndex);
+            }
+            
+            if ($table.length > 0)
+            {
+                $table.each(function(k){
+                    isRemoved = $(this).find(".dataCell:eq(0) input").prop("checked");
+                    isApproved = $(this).find(".dataCell:eq(21) input").prop("checked");
+                    if (!isRemoved && !isApproved)
+                    {
+                        $('.dataRow:eq('+ lineId +')').css('border','');
+                        $(this).css('border', borderColor);
+                        lineId = this.rowIndex - 1;
+                        $(this).find('.dataCell:eq(19) input:last').select();
+                        this.scrollIntoView({behavior: "smooth", inline: "center", block: "center"});
+                        if (fromAnalysis && analysisRemovedIndex < analysisRemoved.length)
+                            analysisRemovedIndex++;
+                        getAmazon(browser, lineId);
+                        return false;
+                    }
+                    if (k == $table.length - 1)
+                    {
+                        alert("Analysis Done!");
+                        return false;
+                    }
+                });
+            }
+            else
+                alert("Analysis Done!");
+        }
+        
+        function previous(){
+            var $table = $($('.dataRow').slice(0, lineId).get().reverse());
+            if ($table.length > 0)
+            {
+                $table.each(function(k){
+                    isRemoved = $(this).find(".dataCell:eq(0) input").prop("checked");
+                    isApproved = $(this).find(".dataCell:eq(21) input").prop("checked");
+                    if (!isRemoved && !isApproved)
+                    {
+                        $('.dataRow:eq('+ lineId +')').css('border','');
+                        $(this).css('border', borderColor);
+                        lineId = this.rowIndex - 1;
+                        $(this).find('.dataCell:eq(19) input:last').select();
+                        this.scrollIntoView({behavior: "smooth", inline: "center", block: "center"});
+                        getAmazon(browser, lineId);
+                        return false;
+                    }
+                    if (k == $table.length - 1)
+                    {
+                        alert("Analysis Done!");
+                        return false;
+                    }
+                });
+            }
+            else
+                alert("Analysis Done!");
+        }
+        
+        function getParentInfo(lineId)
+        {
+            var parent = new Object;
+            parent.qtyOnHand = 0;
+            parent.fbaQty = 0;
+            parent.lowestCurrent = 0;
+            parent.reviews = 0;
+            parent.element = "";
+            
+            var hasVariation = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) table[id^="pp"]')[0] != undefined
+            if (hasVariation)
+            {
+                var sku = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) a:last').text();
+                var $table = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) table[id^="pp"] tr[style!="display: none;"]').slice(1)
+                
+                if ($table.length == 1)
+                {
+                    var parentSku = $table.find('td:eq(0)').text();
+                    var status = $table.find('td:eq(1)').text().trim().toLowerCase();
+                    if (parentSku != sku && status == 'active')
+                    {
+                        $('.dataRow').each(function(){
+                            let thisSku = $(this).find('.dataCell:eq(2) a:last').text();
+                            if (thisSku == parentSku)
+                            {
+                                parent.element = this;
+                                
+                                var qtyOnHand = parseFloat($(this).find(".dataCell:eq(4) p:eq(0)").text());
+                                if(isNaN(qtyOnHand)) qtyOnHand = 0;
+                                parent.qtyOnHand = qtyOnHand;
+                                
+                                var fbaQty = parseFloat($(this).find(".dataCell:eq(4) p:eq(1)").text());
+                                if(isNaN(fbaQty)) fbaQty = 0;
+                                parent.fbaQty = fbaQty;
+                                
+                                var lowestCurrent = parseFloat($(this).find('.dataCell:eq(14) input').val());
+                                if(isNaN(lowestCurrent)) lowestCurrent = 0;
+                                parent.lowestCurrent = lowestCurrent;
+                                
+                                var reviews = parseFloat($(this).find(".dataCell:eq(26) input:first").val());
+                                if (isNaN(reviews)) reviews = 0;
+                                parent.reviews = reviews;
+                                
+                                return false;
+                            }
+                        });
+                    }
+                }
+            }
+            return parent;
+        }
+        
+        function getFamilyInfo(lineId)
+        {
+            var family = [];
+            var hasVariation = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) table[id^="pp"]')[0] != undefined
+            if (hasVariation)
+            {
+                var parentSku = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) a').text();
+                var $table = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) table[id^="pp"] tr[style!="display: none;"]').slice(1)
+                if ($table.length == 1)
+                {
+                    parentSku = $table.find('td:eq(0)').text();
+                    var status = $table.find('td:eq(1)').text().trim().toLowerCase();
+                    if (status == 'active')
+                    {
+                        $('.dataRow').each(function(){
+                            if ($(this).find('.dataCell:eq(2) a').text() == parentSku)
+                            {
+                                $table = $(this).find('.dataCell:eq(2) table[id^="pp"] tr[style!="display: none;"]').slice(1);
+                                return false;
+                            }
+                        });
+                    }
+                }
+                
+                if ($table.length > 1)
+                {
+                    $table.each(function(k){
+                        var memberSku = $(this).find('td:eq(0)').text();
+                        var status = $(this).find('td:eq(1)').text().trim().toLowerCase();
+                        
+                        if (status == 'active')
+                        {
+                            var member = new Object;
+                            member.sku = memberSku;
+                            member.parent = false;
+                            if (memberSku == parentSku) 
+                                member.parent = true
+                                member.qtyOnHand = 0;
+                            member.fbaQty = 0;
+                            member.lowestCurrent = 0;
+                            member.reviews = 0;
+                            
+                            $('.dataRow').each(function(){
+                                if ($(this).find('.dataCell:eq(2) a').text() == memberSku)
+                                {
+                                    member.element = this;
+                                    
+                                    var qtyOnHand = parseFloat($(this).find(".dataCell:eq(4) p:eq(0)").text());
+                                    if(isNaN(qtyOnHand)) qtyOnHand = 0;
+                                    member.qtyOnHand = qtyOnHand;
+                                    
+                                    var fbaQty = parseFloat($(this).find(".dataCell:eq(4) p:eq(1)").text());
+                                    if(isNaN(fbaQty)) fbaQty = 0;
+                                    member.fbaQty = fbaQty;
+                                    
+                                    var lowestCurrent = parseFloat($(this).find('.dataCell:eq(14) input').val());
+                                    if(isNaN(lowestCurrent)) lowestCurrent = 0;
+                                    member.lowestCurrent = lowestCurrent;
+                                    
+                                    var reviews = parseFloat($(this).find(".dataCell:eq(26) input:first").val());
+                                    if (isNaN(reviews)) reviews = 0;
+                                    member.reviews = reviews;
+                                    
+                                    return false;
+                                }
+                            });
+                            family.push(member);
+                        }
+                    });
+                }
+            }
+            return family;
+        }
+        
+        
+        function selectRemove(type = 'final')
+        {
+            var marginPRule = 9;
+            var marginRule = 0.40;
+            var amazonCptsRule = "yes"
+            var salesRankRule = 100000;
+            analysisRemoved = [];
+            
+            if (type == 'final' && enableSaveOnEnter)
+            {
+                enableSaveOnEnter = false;
+                $('#enableSaveOnEnter').prop('checked', enableSaveOnEnter);
+                localStorage.setItem('enableSaveOnEnter', JSON.stringify(enableSaveOnEnter));
+            }
+            
+            $(".dataRow").each(function(k){
+                isRemoved = $(this).find(".dataCell:eq(0) input").prop("checked");
+                isApproved = $(this).find(".dataCell:eq(21) input").prop("checked");
+                
+                if (type == 'final')
+                {
+                    var netMarginP = parseFloat($(this).find(".dataCell:eq(16) p").text().replace("%",""));
+                    if(isNaN(netMarginP)) netMarginP = 0;
+                    
+                    var netMargin = parseFloat($(this).find(".dataCell:eq(15) p").text().replace("$",""));
+                    if(isNaN(netMargin)) netMargin = 0;
+                    
+                    var amazonCpts = $(this).find(".dataCell:eq(8)").text().trim().toLowerCase();
+                    
+                    var poQty = parseFloat($(this).find(".dataCell:eq(19) input:last").val());
+                    if(isNaN(poQty)) poQty = 0;
+                }
+                
+                var salesRank = parseFloat($(this).find('.dataCell:eq(11) input:first').val().replace(",",""));
+                if(isNaN(salesRank)) salesRank = 0;
+                
+                var salesAltRank = parseFloat($(this).find('.dataCell:eq(11) span:first').text());
+                if(isNaN(salesAltRank)) salesAltRank = 0;
+                
+                var needToBuy7 = parseFloat($(this).find(".dataCell:eq(20) table:eq(2) td:eq(1) span").text());
+                if(isNaN(needToBuy7)) needToBuy7 = 0;
+                
+                var needToBuy30 = parseFloat($(this).find(".dataCell:eq(20) table:eq(1) td:eq(1) span").text());
+                if(isNaN(needToBuy30)) needToBuy30 = 0;
+                
+                var qtyOnHand = parseFloat($(this).find(".dataCell:eq(4) p:eq(0)").text());
+                if(isNaN(qtyOnHand)) qtyOnHand = 0;
+                
+                var fbaQty = parseFloat($(this).find(".dataCell:eq(4) p:eq(1)").text());
+                if(isNaN(fbaQty)) fbaQty = 0;
+                
+                if (type == 'final')
+                {
+                    if (netMarginP <= marginPRule || netMargin <= marginRule || amazonCpts == amazonCptsRule || (salesRank >= salesRankRule && salesAltRank >= salesRankRule && needToBuy7 <= 0 && needToBuy30 <= 0))
+                    {
+                        if (qtyOnHand <= 0 && fbaQty <= 0 && !isRemoved && !isApproved)
+                            $(this).find(".dataCell:eq(0)")[0].click();
+                        else
+                            analysisRemoved.push(this);
+                    }
+                    else if (poQty == 0 && (qtyOnHand > 0 || fbaQty > 0))
+                        analysisRemoved.push(this);
+                }
+                else if (type == 'review')
+                {
+                    if (salesRank >= salesRankRule && salesAltRank >= salesRankRule && needToBuy7 <= 0 && needToBuy30 <= 0 && !isRemoved && !isApproved)
+                    {
+                        var family = getFamilyInfo(k);
+                        if (family.length > 0)
+                        {
+                            for (var i = 0; i < family.length; i++)
+                            {
+                                if (family[i].fbaQty > 0 || family[i].qtyOnHand > 0)
+                                {
+                                    break;
+                                }
+                                if (i == family.length - 1)
+                                {
+                                    $(this).find(".dataCell:eq(0)")[0].click();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (qtyOnHand <= 0 && fbaQty <= 0)
+                                $(this).find(".dataCell:eq(0)")[0].click();
+                        }
+                    }
+                    else if ((qtyOnHand > 0 || fbaQty > 0) && !isRemoved && !isApproved)
+                        $(this).find(".dataCell:eq(21)")[0].click();
+                }
+            });
+        }
+        
+        
+        //functions to Scrape
+        function getAsin(w){
+            var page_asin = "";
+            try{
+                table = w.document.getElementById('prodDetails').getElementsByTagName('tr');
+                for(i = 0; i < table.length; i++){
+                    if(table[i].textContent.indexOf("ASIN") != -1){
+                        page_asin = table[i].textContent.replace(/ASIN|:|\s/g,"");
+                        break;
+                    }
+                }
+                return page_asin;
+            }catch(err){
+                try{
+                    table = w.document.getElementById('detail-bullets').getElementsByTagName('li');
+                    for(i = 0; i < table.length; i++){
+                        if(table[i].textContent.indexOf("ASIN") != -1){
+                            page_asin = table[i].textContent.replace(/ASIN|:|\s/g,"");
+                            break;
+                        }
+                    }
+                    return page_asin;
+                }catch(err){
+                    try{
+                        table = w.document.getElementById('detailBullets').getElementsByTagName('li');
+                        for(i = 0; i < table.length; i++){
+                            if(table[i].textContent.indexOf("ASIN") != -1){
+                                page_asin = table[i].textContent.replace(/ASIN|:|\s/g,"");
+                                break;
+                            }
+                        }
+                        return page_asin;
+                    }catch(err){
+                        try{
+                            table = w.document.getElementById('productDetails_detailBullets_sections1')
+                            for(i = 0; i < table.getElementsByTagName('tr').length; i++){
+                                if(table.getElementsByTagName('tr')[i].textContent.indexOf("ASIN") != -1){
+                                    page_asin = table.getElementsByTagName('tr')[i].getElementsByTagName('td')[0].textContent;
+                                    page_asin = page_asin.trim();
+                                    break;
+                                }
+                            }
+                            return page_asin;
+                        }catch(err){}
+                    }
+                }
+            }
+            return page_asin;
+        }
+        
+        function getPrice(w){
+            price = 999.99
+            try
+            {
+                price = parseFloat($('span[id^="priceblock"]:last', w.document).text().replace('$','').replace(',',''));
+                if (isNaN(price)) price = 999.99;
+            } catch (err) {
+                console.log(err)
+            }
+            return price;
+        }
+        
+        function getPriceE(elem){
+            try{
+                price = elem.getElementsByClassName('a-section')[0].getElementsByTagName('span')[0].textContent.replace('$', '').trim();
+            }catch(err){
+                price = "999.99";
+            }
+            return parseFloat(price)
+        }
+        
+        function getShipping(w){
+            
+            try{ // First Case
+                shipping = w.document.getElementById("ourprice_shippingmessage").textContent.replace('$', '').trim();
+            }catch(err){
+                try{ // Second Case
+                    shipping = w.document.getElementById("saleprice_shippingmessage").textContent.replace('$', '').trim();
+                }catch(err){
+                    try{ // First Case
+                        shipping = w.document.getElementById("dealprice_shippingmessage").textContent.replace('$', '').trim();
+                    }catch(err){
+                        shipping = 0;
+                        return parseFloat(shipping);
+                    }
+                }
+            }
+            
+            
+            //shipping = $('span[id$="shippingmessage"]:last', w.document).text().trim();
+            
+            if (shipping == "")
+            {
+                shipping = 0;
+                return parseFloat(shipping);
+            }
+            shipping = shipping.toUpperCase();
+            
+            try{
+                if (shipping.indexOf("FREE") != -1)
+                    shipping = 0;
+                else
+                    shipping = shipping.replace('SHIPPING', '').replace('+', '').replace('$', '').trim();
+            }catch(err){
+                shipping = 999.99;
+                return parseFloat(shipping);
+            }
+            
+            shipping = parseFloat(shipping);
+            
+            if (isNaN(shipping))
+            {
+                shipping = 0;
+                return parseFloat(shipping);
+            }
+            
+            var merchantInfo = w.document.getElementById('merchant-info').textContent.trim();
+            if (merchantInfo.indexOf("Fulfilled") == -1 && merchantInfo.indexOf("old by Amazon") == -1)
+                shipping += 1;
+            
+            return shipping;
+        }
+        
+        function getShippingE(elem){
+            result = [];
+            var inclPrice = 0;
+            var shipping = 0;
+            
+            var isPrime = isPrimeE(elem);
+            if (isPrime == true){
+                shipping = 0;
+                inclPrice = 1;
+                result.push(parseFloat(shipping));
+                result.push(inclPrice);
+                return result;
+            }
+           
+            try{
+                var k = elem.getElementsByClassName('a-section')[0].getElementsByTagName('span').length;
+                shipping = elem.getElementsByClassName('a-section')[0].getElementsByTagName('span')[k-1].textContent.replace('$', '').trim();
+            }catch(err){
+                shipping = "0";
+            }
+            
+            shipping = shipping.toUpperCase();
+            
+            try{
+                if (shipping.indexOf("FREE SHIPPING ON") != -1)
+                {
+                    shipping = 0;
+                    inclPrice = 1;
+                    result.push(parseFloat(shipping));
+                    result.push(inclPrice);
+                    return result;
+                }
+                else if (shipping.indexOf("FREE") != -1)
+                {
+                    shipping = 0;
+                }
+                else
+                {   
+                    shipping = shipping.replace(/\s|SHIPPING|\+/g,'').trim();
+                }
+            }catch(err){
+                shipping = 999.99;
+                inclPrice = 0;
+                result.push(parseFloat(shipping));
+                result.push(inclPrice);
+                return result;
+            }
+            
+            shipping = parseFloat(shipping);
+            
+            if (elem.getElementsByClassName('a-section')[1].getElementsByTagName('span')[1].textContent.trim().indexOf('Amazon') == -1)
+                shipping += 1;
+            
+            result.push(shipping);
+            result.push(inclPrice);
+            return result;
+        }
+        
+        function getSoldBy(w){
+            try{
+                if (w.document.getElementById('merchant-info').textContent.indexOf('old by Amazon') != -1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }catch(err){
+                return false;
+            }
+        }
+        
+        function getSoldByE(elem){
+            try{
+                if (elem.getElementsByClassName('a-section')[1].getElementsByTagName('span')[1].textContent.trim().indexOf('Amazon') != -1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }catch(err){
+                return false;
+            }
+        }
+        
+        function isPrimeE(elem){
+            var isPrime = false;
+            try{
+                if (elem.getElementsByTagName('i')[0].className.indexOf('prime') != -1 || elem.getElementsByTagName('i')[0].className.indexOf('addon') != -1)
+                {
+                    isPrime = true;
+                    return isPrime;
+                }
+                else return isPrime;
+            }catch(err){
+                return isPrime;
+            }
+        }
+        
+        function getSalesRank(w){
+            var sales_rank = "0";
+            try{
+                sales_rank = w.document.getElementById('SalesRank').textContent;
+                if(sales_rank.indexOf(".zg_hrsr") != -1){
+                    sales_rank = sales_rank.substring(0, sales_rank.indexOf(".zg_hrsr")).trim();
+                }
+                
+                if (sales_rank.indexOf("#") == -1)
+                    sales_rank = "0";
+                else
+                    sales_rank = sales_rank.substring(sales_rank.indexOf("#") + 1, sales_rank.indexOf(" in ")).trim();
+                
+                return sales_rank
+            }catch(err){
+                try{
+                    table = w.document.getElementById('productDetails_detailBullets_sections1')
+                    for(i = 0; i < table.getElementsByTagName('tr').length; i++){
+                        if(table.getElementsByTagName('tr')[i].textContent.indexOf("Best Sellers Rank") != -1){
+                            sales_rank = table.getElementsByTagName('tr')[i].getElementsByTagName('td')[0].textContent;
+                            sales_rank = sales_rank.substring(sales_rank.indexOf('#') + 1, sales_rank.indexOf(' in '));
+                            break;
+                        }
+                    }
+                    return sales_rank;
+                }catch(err){}
+            }
+            return sales_rank;
+        }
+        
+        function getOffers(e) {
+            var res = { lowest: 999.99, amazon: 0.00 };
+            table = e.document.getElementsByClassName('a-row a-spacing-mini olpOffer');
+            if (table.length > 0) {
+                var mfn = [];
+                for (var i = 0; i < table.length; i++) {
+                    var price = parseFloat(table[i].getElementsByClassName('a-column')[0].getElementsByTagName('span')[0].textContent.trim().replace("$", "").replace(",", ""));
+                    var shipping = 0.00;
+                    let isPrime = table[i].getElementsByClassName('a-column')[0].getElementsByClassName('supersaver').length > 0
+                    let isFBA = table[i].querySelectorAll('.a-column:nth-of-type(3) a')[0].textContent.trim().toUpperCase().indexOf('FULFILLMENT') != -1
+                    if (isFBA || isPrime) {
+                        let seller = table[i].getElementsByClassName('a-column')[3].getElementsByTagName('h3')[0].textContent.trim().toUpperCase();
+                        if (seller.indexOf('AMAZON') != -1) {
+                            res.amazon = price;
+                        }
+                        res.lowest = price;
+                        break;
+                    }
+                    else {
+                        let elem = table[i].getElementsByClassName('a-column')[0].getElementsByClassName('olpShippingPrice');
+                        if (elem.length > 0)
+                            shipping = parseFloat(elem[0].textContent.replace('$', ''));
+                        
+                        shipping += 1;
+                        mfn.push(shipping + price);
+                    }
+                    if (i == table.length - 1) {
+                        res.lowest = Math.min(...mfn);
+                    }
+                }
+            }
+            return res;
+        }
+        
+        function getInfo(w, lineId, sfAsin){
+            var amznAsin = getAsin(w);
+            
+            if (amznAsin != "")
+            {
+                //Get Old Values from Salesforce
+                var salesRankOld = $('.dataRow:eq(' + lineId + ') .dataCell:eq(11) input:first').val()
+                if (salesRankOld == "")
+                    salesRankOld = "0";
+                var salesRankSort = $('.dataRow:eq(' + lineId + ') .dataCell:eq(11) span:first').text()
+                if (salesRankSort == "")
+                    salesRankSort = "0";
+                var amazonPriceOld = $('.dataRow:eq(' + lineId + ') .dataCell:eq(12) input').val()
+                if (amazonPriceOld == "")
+                    amazonPriceOld = "0";
+                var lowestCurrentOld = $('.dataRow:eq(' + lineId + ') .dataCell:eq(14) input:first').val()
+                if (lowestCurrentOld == "")
+                    lowestCurrentOld = "0";
+                
+                var oppsku = $('.dataRow:eq(' + lineId + ') .dataCell:eq(2) a').text();
+                var storePrice = parseFloat($('.dataRow:eq(' + lineId + ') .dataCell:eq(5) input').val());
+                var casePrice = 0;
+                if ($('.dataRow:eq(' + lineId + ') .dataCell:eq(27) input:first').prop("checked") != true){
+                    var parent = getParentInfo(lineId);
+                    if (parent.element != "")
+                    {
+                        var caseQty = $('.dataRow:eq(' + lineId + ') .dataCell:eq(18) input').val();
+                        if (caseQty.indexOf('of') != -1){
+                            caseQty = parseFloat(caseQty.replace(/.+of\s/g,''));
+                            
+                            if (!isNaN(caseQty))
+                            {
+                                casePrice = parent.lowestCurrent * (caseQty * 0.9 + 0.1);
+                                casePrice = round(casePrice);
+                            }
+                        }
+                    }
+                }
+                
+                if (amznAsin == sfAsin)
+                {    
+                    //Get New Values from Amazon
+                    var priceArr = [];
+                    var soldByArr = [];
+                    var amazonPriceNew = "0";
+                    var lowestCurrentNew = "999.99";
+                    var salesRankNew = "0";
+                    
+                    priceArr.push(getPrice(w)+getShipping(w));
+                    soldByArr.push(getSoldBy(w));
+                    
+                    salesRankNew = getSalesRank(w);
+                    
+                    if (salesRankNew == "0")
+                        salesRankNew = salesRankSort;
+                    
+                    try
+                    {
+                        var mbc = w.document.getElementById('mbc').getElementsByClassName('a-box')
+                        if (mbc != null)
+                        {
+                            for (var i = 1; i < mbc.length - 1; i++)
+                            {
+                                let shipPrice = getShippingE(mbc[i]);
+                                if (shipPrice[1] == 1){
+                                    priceArr.push(getPriceE(mbc[i])+shipPrice[0]);
+                                    soldByArr.push(getSoldByE(mbc[i]));
+                                }
+                            }
+                        }
+                    } catch(err){}
+                    
+                    var lowestPrice = Math.min(...priceArr)
+                    
+                    if (lowestPrice == 999.99)
+                    {
+                        var availElem = w.document.getElementById("availability");
+                        var isAvailable = false;
+                        if (availElem != undefined)
+                            isAvailable = availElem.textContent.trim().indexOf('Available from') != -1;
+                        if (isAvailable)
+                        {
+                            try{
+                                var url = "https://www.amazon.com/gp/offer-listing/" + sfAsin + "/ref=dp_olp_new_mbc?ie=UTF8&condition=new";
+                                $(w.open(url)).load(function(){
+                                    var offers = getOffers(this);
+                                    lowestPrice = offers.lowest;
+                                    amazonPriceNew = offers.amazon.toFixed(2);
+                                    updateValues();
+                                    this.close();
+                                });
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        }
+                        else
+                            updateValues();
+                    }
+                    else
+                    {
+                        for (var i = 0; i < soldByArr.length; i++)
+                        {
+                            if (soldByArr[i])
+                            {
+                                amazonPriceNew = priceArr[i].toFixed(2);
+                                break;
+                            }
+                        }
+                        updateValues();
+                    }
+                    
+                    function updateValues()
+                    {
+                        var lowpriceArr = [];
+                        if (lowestPrice > 0)
+                            lowpriceArr.push(lowestPrice);
+                        if (lowestPrice == 999.99 && storePrice > 0)
+                            lowpriceArr.push(storePrice);
+                        if (casePrice > 0)
+                            lowpriceArr.push(casePrice);
+                        
+                        if (lowpriceArr.length > 0)
+                            lowestCurrentNew = Math.min(...lowpriceArr).toFixed(2); 
+                        else
+                            lowestCurrentNew = "999.99";
+                        
+                        //Update Values
+                        if (clearLastRow)
+                        {
+                            try
+                            {
+                                $('.dataRow:eq(' + lastResearchLine + ')').css('height', '')
+                            } catch(err){}
+                        }
+                        $('.dataRow:eq(' + lineId + ') .dataCell:eq(11) input:first').val(addThousandSeparator(salesRankNew));
+                        $('.dataRow:eq(' + lineId + ') .dataCell:eq(14) input:first').val(lowestCurrentNew).trigger('onchange');
+                        $('.dataRow:eq(' + lineId + ') .dataCell:eq(12) input').val(amazonPriceNew); 
+                        
+                        compare(lineId, 11, "salesRank", salesRankNew, salesRankOld, 'reverse');
+                        compare(lineId, 14, "lowestCurrent", lowestCurrentNew, lowestCurrentOld, 'normal');
+                        compare(lineId, 12, "amazonPrice", amazonPriceNew, amazonPriceOld, 'normal');
+                        
+                        $('.dataRow:eq(' + lineId + ')').css('height', '220px')   
+                        
+                        lastResearchLine = lineId;
+                        researchDone = true;
+                    }
+                }
+                else if (amznAsin != sfAsin)
+                {
+                    var lowpriceArr = [];
+                    if (storePrice > 0)
+                        lowpriceArr.push(storePrice);
+                    if (casePrice > 0)
+                        lowpriceArr.push(casePrice);
+                    
+                    if (lowpriceArr.length > 0)
+                        lowestCurrentNew = Math.min(...lowpriceArr).toFixed(2); 
+                    else
+                        lowestCurrentNew = "999.99"; 
+                    
+                    if (clearLastRow)
+                    {
+                        try
+                        {
+                            $('.dataRow:eq(' + lastResearchLine + ')').css('height', '')
+                        } catch(err){}
+                    }   
+                    if (clearLastRow || lineId == lastResearchLine)
+                    {
+                        try
+                        {
+                            $('.dataRow:eq(' + lastResearchLine + ') #salesRank').remove()
+                            $('.dataRow:eq(' + lastResearchLine + ') #amazonPrice').remove()                
+                        } catch(err){}
+                    }   
+                    
+                    compare(lineId, 14, "lowestCurrent", lowestCurrentNew, lowestCurrentOld, 'normal');   
+                    compare(lineId, 25, "newAsin", sfAsin, amznAsin, 'special');  
+                    
+                    //$('.dataRow:eq(' + lineId + ') .dataCell:eq(25) input:first').val(amznAsin)
+                    $('.dataRow:eq(' + lineId + ') .dataCell:eq(14) input:first').val(lowestCurrentNew).trigger('onchange');
+                    
+                    $('.dataRow:eq(' + lineId + ')').css('height', '220px')    
+                    
+                    lastResearchLine = lineId;
+                    researchDone = true;
+                }
+            }
+            else
+            {
+                alert("Could not locate Amazon ASIN!");
+                researchDone = true;
+            }
+            
+        }
+        
+        /*
+        function navigate(url, w, lineId) {
+            try{
+                w.location.assign(url)
+                
+                var waitForLoad = setInterval(function(){
+                    try{
+                        if(w.document.readyState == "complete")
+                        {
+                            clearInterval(waitForLoad);
+                            getInfo(w, lineId);
+                        }
+                    } catch (err) {
+                        clearInterval(waitForLoad);
+                        console.log(err);
+                    }
+                }, 1000);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        */     
+        
+        /*
+        function getAmazon(w, lineId){
+            if (w == null || w.closed == true)
+            {
+                w = window.open("http://www.amazon.com");
+                browser = w;
+            }
+            sfAsin = document.getElementsByClassName('dataRow')[lineId].getElementsByClassName('dataCell')[25].getElementsByTagName('input')[0].value;
+            if (sfAsin != "")
+            {
+                var url = "https://www.amazon.com/gp/product/" + sfAsin + "/ref=twister_dp_update?ie=UTF8&psc=1" 
+                navigate(url, w, lineId);
+            }
+            else
+            {
+                alert("ASIN Not Found!");
+            }
+        }
+        */
+        
+        function getAmazon(w, lineId){
+            researchQueue.push([lineId,document.getElementsByClassName('dataRow')[lineId].getElementsByClassName('dataCell')[25].getElementsByTagName('input')[0].value]);
+            
+            if (w == null || w.closed == true)
+            {
+                w = window.open("http://www.amazon.com");
+                browser = w;
+            }
+            var checkResearch = setInterval(function(){
+                try{
+                    if(researchDone == true && researchQueue.length > 0){
+                        clearInterval(checkResearch);
+                        var l = researchQueue[0][0];
+                        var sfAsin = researchQueue[0][1];
+                        researchQueue.splice(0, 1);
+                        researchDone = false;
+                        if (sfAsin != "")
+                        {
+                            var url = "https://www.amazon.com/gp/product/" + sfAsin + "/ref=twister_dp_update?ie=UTF8&psc=1" 
+                            try{
+                                w.location.assign(url)
+                                
+                                var waitForLoad = setInterval(function(){
+                                    try{
+                                        if(w.document.readyState == "complete")
+                                        {
+                                            clearInterval(waitForLoad);
+                                            getInfo(w, l, sfAsin);
+                                        }
+                                    } catch (err) {
+                                        clearInterval(waitForLoad);
+                                        console.log(err);
+                                        researchDone = true;
+                                    }
+                                }, 1000);
+                            } catch (err) {
+                                console.log(err);
+                                researchDone = true;
+                            }
+                        }
+                        else
+                        {
+                            alert("ASIN Not Found!");
+                            researchDone = true;
+                        }
+                    }
+                    else if (researchQueue.length == 0)
+                    {
+                        clearInterval(checkResearch);
+                    }
+                } catch (err) {
+                    clearInterval(checkResearch);
+                    console.log(err);
+                }
+            }, 1000);
+        }
+        
+        function resetQueue(){
+            researchQueue = [];
+            researchDone = true;
+            alert("Queue has been Reset!")
+        }
+        
+        function openAmazon(w){
+            if (w == null || w.closed == true)
+            {
+                w = window.open("http://www.amazon.com");
+                browser = w;
+            }
+            var sfAsin = document.getElementsByClassName('dataRow')[lineId].getElementsByClassName('dataCell')[25].getElementsByTagName('input')[0].value;
+            if (sfAsin != "")
+            {
+                var url = "https://www.amazon.com/gp/product/" + sfAsin + "/ref=twister_dp_update?ie=UTF8&psc=1"
+                try{
+                    w.location.assign(url)
+                }   catch (err) {
+                    console.log(err);
+                }
+            }
+            else
+            {
+                alert("ASIN Not Found!");
+            }
+        }
+        
+        //auxiliar function
+        const addThousandSeparator = (x) => {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function round(n){
+            let k = n.toFixed(2);
+            let lstChar = parseInt(k.charAt(k.length-1));
+            n = parseFloat(k);
+            if (lstChar >= 0 && lstChar < 7)
+                n -= (lstChar + 1) / 100;
+            else
+                n += (9 - lstChar) / 100;
+            return n
+        }
+        </script>
+        <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                 
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                   
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+        </script>
+    <!---------------------------------------popupscript for parentlisting------------------------------------>
+    <script>    
+    function ParenttoggleTable(i){
+      try{
+        var elem=document.getElementById("pp"+i);
+        var hide = elem.style.display =="none";
+        if (hide) {
+            elem.style.display="table";
+        } 
+        else {
+            elem.style.display="none";
+        }
+        <!--Grouping(); -->
+            elem.rows[0].cells[0].style.backgroundColor="rgb(222, 229, 239)";
+        elem.rows[0].cells[1].style.backgroundColor="rgb(222, 229, 239)";
+        elem.rows[0].cells[2].style.backgroundColor="rgb(222, 229, 239)"; 
+        elem.style.borderWidth="2px";
+        elem.style.borderColor="#000";
+        elem.style.borderStyle="solid";
+      }catch(e){
+            <!-- alert("error"+e.message); --> 
+        }   
+    }
+    
+    function Restorevalue(i,j){
+      try{
+        var elem=document.getElementById("pp"+i);
+        elem.rows[j+1].cells[1].innerHTML='Active';
+        elem.rows[j+1].cells[1].style.fontWeight ="600"; 
+        elem.rows[j+1].cells[2].innerHTML='';  
+       }catch(e){}               
+    }
+    </script>
+    <apex:form >
+    
+    <script language="javascript" type="text/javascript">
+        function SelectSingleCheckbox(Chkid) {
+            var chkbid = document.getElementById(Chkid);
+            var chkList = document.getElementsByTagName("input");
+            for (i = 0; i < chkList.length; i++) {
+                if (chkList[i].type == "checkbox" && chkList[i].id != chkbid.id) {
+                    chkList[i].checked = false;
+                }
+            }
+        }
+</script>
+            <apex:variable var="rowcount" value="{!1}"/>
+            <div style="Text-align:Center;Font-size:20px;">
+                <b>
+                    CustomerDetailsReport
+                </b>
+            </div>
+            <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" />
+            <apex:includeScript value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.17.8/js/jquery.tablesorter.min.js" />
+            <apex:stylesheet value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.17.8/css/theme.blue.css" /> 
+            
+            <script>
+            $(document).ready(function()
+                              {
+                                  $("[id$='accsTable']").tablesorter({theme: 'blue', dateFormat : "dd/mm/yyyy"});
+                              });
+            </script>
+            <!-- Start Styles. Move the 'style' tags and everything between them to between the 'head' tags -->
+            <style type="text/css">
+                .myTable { background-color:#eee;border-collapse:collapse; }
+                .myTable th { background-color:#A6ABC4;color:white;width:50%; }
+                .myTable td, .myTable th { padding:5px;border:1px solid #000; }
+            </style>
+            <!-- End Styles -->
+    <apex:pageBlock >
+        <table class="tablesorter" border="1" width="100%">
+            <thead style="color:white;Background-color:gray" >
+                <tr>
+                    <th> Action </th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <apex:repeat value="{!wrapList}" var="w">
+                <tr>
+                    <td> <apex:InputCheckBox ID="CheckBox1"  OnClick="javascript:SelectSingleCheckbox(this.id)"/></td>
+                    <td>
+                        <apex:outputField value="{!w.con.LastName}"> 
+                        <apex:inlineEditSupport event="ondblclick" showOnedit="update"/> 
+                    </apex:outputField>
+                       </td>
+                    <td>{!w.con.Firstname} </td>
+                    <td>{!w.con.Email}</td>
+                    <td>{!w.con.Phone}</td>
+                </tr>
+            </apex:repeat> 
+        </table>
+      <apex:commandButton value="Save" action="{!saveme}"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

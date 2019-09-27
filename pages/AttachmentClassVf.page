@@ -1,0 +1,14 @@
+<apex:page standardController="Account" extensions="AttachmentClass">
+    <apex:form >
+        <apex:pageBlock title="Attachments" mode="Edit" tabStyle="Account" id="pbs1">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Upload" action="{!upload}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+                <apex:repeat value="{!allFileList}" var="atc">
+                    <apex:inputfile value="{!atc.body}" filename="{!atc.Name}" />
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

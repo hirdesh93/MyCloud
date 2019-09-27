@@ -1,0 +1,12 @@
+<apex:page controller="ImageUploadTestController">
+    <apex:form >
+    <apex:inputFile value="{!file}" />
+
+    <apex:commandbutton action="{!go}" value="go"/>
+    </apex:form>
+
+    <!-- none of below works!! :( -->
+    <a href="/{!cv.id}">{!cv.title} {!cv.pathOnClient}</a>
+    <a href="https://na7.salesforce.com/069A00000009FG4"></a>
+    <apex:image value="/069A00000009Ux3" width="220" height="55"/>
+    </apex:page>

@@ -1,0 +1,12 @@
+<apex:page standardController="Book__c">
+    <apex:form >
+        <apex:pageBlock title="Book Detail" tabStyle="lead">
+            <apex:pageBlockTable value="{!Book__c}" var="b" columns="2">
+                <apex:column value="{!b.name}"/>
+               <apex:column value="{!b.Author__r.name}"/> 
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+</apex:page>

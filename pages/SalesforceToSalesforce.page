@@ -1,0 +1,39 @@
+<apex:page controller="StoSIntegration" sidebar="false">
+    <apex:form >
+        <apex:pageBlock title="Integration">
+            <apex:pageBlockButtons location="Bottom">
+                <apex:commandButton value="Submit" action="{!submit}"/>
+                <apex:commandButton value="GetTab" action="{!getTabs}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="EndPoint"/>
+                    <apex:outputText value="{!url}"/>                    
+                </apex:pageBlockSectionItem>   
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Client Id"/>
+                    <apex:inputText value="{!clientId}"/>                    
+                </apex:pageBlockSectionItem>  
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Client Secret"/>
+                    <apex:inputText value="{!clientSecret}"/>                    
+                </apex:pageBlockSectionItem>  
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="User Name"/>
+                    <apex:inputText value="{!username}"/>                    
+                </apex:pageBlockSectionItem>  
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Password"/>
+                    <apex:inputText value="{!password}"/>                    
+                </apex:pageBlockSectionItem>   
+                <apex:outputLabel value="{!accessToken}" />
+            </apex:pageBlockSection>   
+            <apex:pageBlockSection title="Tabs" columns="1" rendered="{! !ISNULL(names)}">
+                <apex:repeat value="{!names}" var="a">
+                    {!a} <br/><br/>
+                </apex:repeat>
+            </apex:pageBlockSection> 
+        </apex:pageBlock> 
+        
+    </apex:form>    
+</apex:page>

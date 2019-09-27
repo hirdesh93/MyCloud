@@ -1,0 +1,21 @@
+<apex:page standardController="Account" extensions="AccountRelatedTaskController">
+    <apex:form >
+        <style>
+		.header { display: none; }
+		</style>
+        <apex:pageblock id="CustomList" title="Tasks"  >
+                <div style="over-flow:auto;">
+            <apex:pageBlockTable value="{!tskList}" var="t" rows="1">
+                <apex:column value="{!t.Subject}"/>
+                <apex:column value="{!t.whatId}"/>
+                <apex:column value="{!t.Type}"/>
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!tskList}" var="t" first="1" headerClass="header" style="margin-left:50px;" width="70%">
+                <apex:column value="{!t.Subject}"  width="460Px;"/>
+                <apex:column value="{!t.whatId}"/>
+                <apex:column value="{!t.Type}"/>
+            </apex:pageBlockTable>
+                </div>
+          </apex:pageblock>
+    </apex:form>
+</apex:page>

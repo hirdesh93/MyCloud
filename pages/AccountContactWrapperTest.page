@@ -1,0 +1,28 @@
+<apex:page controller="AccountContactWrapperController" >
+    <apex:form >
+        
+        <!--Display Account & Contact info from 1 Query-->
+        <apex:pageBlock title="Info From Query">
+            <apex:pageBlockTable value="{!accounts}" var="a">
+                <apex:Column value="{!a.Name}" />
+                <apex:Column headerValue="Contact Names">
+                    <apex:repeat value="{!a.Contacts}" var="c">
+                        {!c.FirstName} {!c.LastName} <br />
+                    </apex:repeat>
+                </apex:Column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+        <!--Display Account & Contact info from 1 Wrapper class-->
+        <apex:pageBlock title="Info From Wrapper class">
+            <apex:pageblocktable value="{!ACWrappers}" var="w">
+                <apex:Column value="{!w.account.Name}" />
+                <apex:column headervalue="Contact Names">
+                    <apex:repeat value="{!w.contacts}" var="c">
+                        {!c.FirstName} {!c.LastName} <br/>
+                    </apex:repeat>
+                </apex:column>
+            </apex:pageblocktable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

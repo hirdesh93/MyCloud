@@ -1,0 +1,27 @@
+<!--
+ * sfdcMonkey.com 
+ * 2/21/2018 API Version : 42
+  -->
+<aura:component controller="multiPicklistCtrl">
+    <!--init handler event call "initialize" function on component load
+        and fetch picklist values-->
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    
+   <!--Declare Attributes-->  
+    <aura:attribute name="objInfo" type="account" default="{sobjectType : 'Account'}" />
+	<aura:attribute name="listSkillsOptions" type="List" default="[]"/>
+    <aura:attribute name="selectedSkillsItems" type="List" default="[]"/>
+  
+   <!-- lightning dualListbox component -->
+    <lightning:dualListbox aura:id="selectOptions"
+                           name="Skills"
+                           label= "Select Skills" 
+                           sourceLabel="Available Options" 
+                           selectedLabel="Selected Options" 
+                           options="{! v.listSkillsOptions }"
+                           value="{! v.selectedSkillsItems }"
+                           onchange="{! c.handleChange }"/>
+    <br/>
+    
+    <lightning:button variant="brand" label="Selected Items" onclick="{!c.getSelectedItems }" />
+</aura:component>

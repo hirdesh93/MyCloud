@@ -1,0 +1,173 @@
+<apex:page renderAs="PDF"  >
+<head>
+        <style type="text/css" media="print">
+            @page{
+                    size: A4;
+                    @top-center {
+                    content: "CustomerQuote";
+                    }
+                    @bottom-center {
+                        content: counter(page);
+                    }
+                  }
+            
+        </style>
+    </head>
+    <body>
+    
+   
+  <!--  <table width="100%" border="1" >
+            <tr>
+                <td style="width:50% padding:5px;text-align:left;">
+                    <apex:variable var="imageVar" value="{!objWrapCustomerQuote.objUnit.Floor__r.Wing__r.Tower__r.Phase__r.Project__r.Project_Logo_Name__c+'.jpg'}"/>        
+                    <apex:image url="{!URLFOR($Resource.EdelweissProjectLogo,imageVar)}" width="250px" height="250px" style="float:left"/>            
+                </td>
+            </tr> 
+        </table> 
+       <br/> <br/> -->
+       <div style="border:1px solid black;height:370px;width:100%;">
+           <div style="border:1px solid black;width:38%;float:left;height:260px;">
+               <table style="border:0 px solid white !important;" width="100%" cellspacing="0 px" cellpadding="0 px">
+                   <tr style="border:1px solid black;height:260px;">
+                       <td collspan="2">here your logo</td>
+                   </tr>
+                   <tr style="border:1px solid black;height:5px;background-color:blue;">
+                       <td></td>
+                       <td></td>
+                   </tr>
+                   <tr style="border:1px solid black;height:20px;">
+                       <td style="border:1px solid black;">Quotation Date</td>
+                       <td style="border:1px solid black;">23/01/2018</td>
+                   </tr>
+               </table>
+           </div>
+           <div style="border:1px solid black;width:60%;float:right;height:auto;">
+              <table style="border:0 px solid white !important;" width="100%" cellspacing="0 px" cellpadding="0 px" >
+                  <tr >
+                      <td style="margin:5px;padding:5px;font-weight:bold;">Site Address:</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:5px;padding:5px;">kjgjkbkjbkjbkjbjkb:</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:5px;padding:5px;font-weight:bold;">Sales Office:</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:5px;padding:5px;">jhvhjvyjhvyjvyu:</td>
+                  </tr>
+              </table> 
+              <hr style="color:black;"/>
+              <table style="border:0 px solid white !important;" width="100%" cellspacing="0 px" cellpadding="0 px" >
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Quote Master:</span> QTM-00027</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Tower Name:</span> Tower 1</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Opportunity:</span> hugu</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Unit No:</span> 2803</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Typology:</span> 5 BHK</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Saleable Area(Sqft.):</span> 1212</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Carpet Area (Sqft.):</span> 1076</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">EB + Utility Area (Sqft.):</span> 154</td>
+                  </tr>
+                  <tr>
+                      <td style="margin:3px;padding:3px;"><span style="font-weight:bold;">Net Area (Sqft.):</span> 1260</td>
+                  </tr>
+              </table> 
+           </div>
+       </div>
+    
+ <!-- <div style="width=95%;border:2px solid black;padding:5px;font-size:12px;font-family:sans-serif;">
+     <table width="100%" border="1" >
+            <tr>
+                <td style="width:80%;padding:5px;text-align:center;background-color:#e6b800">
+                    <div style="border-radius:25px;">
+                        <span style="font-size: 24px;font-weight: bold;font-family:sans-serif;display:inline">
+                            Payment Schedule 
+                        </span>
+                    </div>
+                </td>
+                <td style="width:20% padding:5px;text-align:left;">
+                    <apex:variable var="imageVar" value="{!objWrapCustomerQuote.objUnit.Floor__r.Wing__r.Tower__r.Phase__r.Project__r.Project_Logo_Name__c+'.jpg'}"/>
+                            
+                    <apex:image url="{!URLFOR($Resource.EdelweissProjectLogo,imageVar)}" width="150px" height="150px" style="float:right;background-color:#ffcc00"/>            
+                </td>
+            </tr> 
+        </table>
+        <table width="100%" border="1" cellspacing ="2" style="margin-top:20px;border:1px solid black;text-align:left;">
+            <thead style="background-color:#e6b800;font-size:14px;">
+                <th style="padding-left:15px;">SL.</th>
+                <th style="padding-left:5px;">MILESTONE</th>
+                <th style="text-align:center;">Due %</th>
+                <th style="padding-left:5px;">Scheduled Completion Date</th>
+                <th style="padding-left:5px;">Total Amount Due</th>
+                <th style="padding-left:5px;">Amount Due</th>
+                <th style="padding-left:5px;">GST</th>
+                <th style="padding-left:5px;">TDS</th>
+                
+            </thead>
+            <tbody>
+            <apex:variable value="{!1}" var="rowNum"/>
+            
+            <apex:repeat value="{!objWrapCustomerQuote.lstWrapCustomerMilestone}" var="wrapMilestone">
+                <tr >
+                    <td style="text-align:center;">
+                    <apex:outputText value="{!FLOOR(rowNum)}"/></td>
+                    <td>{!wrapMilestone.strMilestoneName}</td>
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, number,0.00}">
+                            <apex:param value="{!wrapMilestone.perMilestoneDue}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, date,dd/MM/yyyy}">
+                            <apex:param value="{!wrapMilestone.ScheduledCompletionDate}" />
+                        </apex:outputText>
+                    </td>
+                    
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, number,0.00}">
+                            <apex:param value="{!wrapMilestone.decTotalAmountDue}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, number,0.00}">
+                            <apex:param value="{!wrapMilestone.decAmountDue}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, number,0.00}">
+                            <apex:param value="{!wrapMilestone.decAmountGST}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="text-align:right;padding:3px;"> <apex:outputText value="{0, number,0.00}">
+                            <apex:param value="{!wrapMilestone.decAmountTDS}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+            </apex:repeat>
+            <tr>
+             <td></td>
+             <td>Total %</td>
+             <td>{!objWrapCustomerQuote.TotalMilestonePercentage}</td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+            </tr>
+            </tbody>
+            
+            </table>
+        </div> -->
+      
+    </body>        
+</apex:page>

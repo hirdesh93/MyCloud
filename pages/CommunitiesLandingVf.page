@@ -1,0 +1,23 @@
+<apex:page controller="CommunitiesLandingCont"  showHeader="false" sidebar="false">
+    
+    <apex:include pageName="Header"/>
+    
+    <apex:tabPanel switchType="Client" selectedTab="NeedSupport" id="TabPanel1">
+        
+        <apex:tab label="Need Support" name="NeedSupport" id="NeedSupport">
+            
+            <div align="left" width="50%">
+                
+              <apex:include pageName="AccountList"/>
+                
+             <!--      ListCase is a VF page which lists all the Cases -->
+                
+            </div>
+            
+        </apex:tab>
+        
+    </apex:tabPanel>
+    
+    <apex:include pageName="Footer"/>
+    
+</apex:page>

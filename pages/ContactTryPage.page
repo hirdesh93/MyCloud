@@ -1,0 +1,22 @@
+<apex:page standardController="Contact" showHeader="false">
+    <apex:form >
+        <apex:pageBlock title="Contact Information" mode="Edit" tabStyle="Contact">
+            
+            <apex:pageBlockSection collapsible="false" columns="2" title="Contact">
+                <apex:pageBlockSectionItem >
+                    <apex:outputlabel value="First Name"/>
+                    <apex:outputpanel >
+                        <apex:inputField value="{!Contact.Salutation}" />
+                        
+                        <apex:inputField value="{!Contact.FirstName}" />
+                    </apex:outputpanel>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+            
+      <!--      <apex:outputlink value="/apex/StationCheck"> Click Here <apex:param name="msg" value="success"/> </apex:outputlink>
+            !-->
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

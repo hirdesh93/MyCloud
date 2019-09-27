@@ -1,0 +1,23 @@
+<apex:page standardController="Account" extensions="AccountController1">
+    <apex:form id="f1">
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:inputField value="{!account.Name}" id="ab"/>
+                <apex:commandButton value="Find" action="{!Find}" reRender="Out" status="Mystatus" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="pb">
+                <apex:actionStatus id="Mystatus" startText="Loading...">
+                    <apex:facet name="Stop">
+                        <apex:outputPanel id="Out">
+                            <apex:pageBlockTable value="{!cont}" var="c" id="tbl">
+                                <apex:column headerValue="Name" value="{!c.Name}"/>
+                                <apex:column headerValue="Phone" value="{!c.phone}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputText rendered="{!(cont.size=0)}" value="No Records Found"></apex:outputText>
+                        </apex:outputPanel>
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

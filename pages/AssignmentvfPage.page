@@ -1,0 +1,25 @@
+<apex:page controller="AssignmentClass" action="{!doInit}">
+    <apex:form >
+        <apex:pageBlock >
+            Type Order Name :<apex:inputText value="{!input}" >
+            <apex:actionSupport action="{!showdata}" event="onkeyup" reRender="outputText" />
+        </apex:inputText>
+            </apex:pageBlock>
+            <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!onp}" var="o" id="outputText">
+                    <apex:column value="{!o.Active__c}"/>
+                    <apex:column value="{!o.PartyName__c}"/>
+                    <apex:column value="{!o.Address__c}"/>
+                    <apex:column value="{!o.Amount__c}"/>
+                    <apex:column value="{!o.Order_Date__c}"/>
+                    <apex:column value="{!o.PartyName__c}"/>
+                    <apex:column value="{!o.Product__c}"/>
+                    <apex:column value="{!o.Quantity__c}"/>
+                    <apex:column value="{!o.Total_Amount__c}"/>
+                    <apex:column value="{!o.Purchase_Order_Line_Items__c}"/>
+                 </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

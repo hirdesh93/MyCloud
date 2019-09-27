@@ -1,0 +1,18 @@
+<apex:page controller="apextojavascript" showHeader="false">
+<apex:form >
+  <script>
+    function closeWin() {
+       window.close();
+    }
+</script>
+<apex:outputText value="{!calltoclose}" escape="false"></apex:outputText>
+<apex:commandButton action="{!close}" value="Close"/>
+  <script>
+        function myFunction() {
+            var myWindow = window.open("/apex/invoicevfpage", "", "width=900,height=500,top=120,left=150");
+            return false;
+         }
+       </script>
+    <apex:commandButton onclick="return myFunction()" value="Invoice"/>
+  </apex:form>
+</apex:page>

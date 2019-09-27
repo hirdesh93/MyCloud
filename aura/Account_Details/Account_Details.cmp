@@ -1,0 +1,11 @@
+<aura:component controller="ContactRelatedAccount" implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="GLOBAL"> 
+    <aura:attribute name="recordId" type="String"  />
+	<aura:attribute name="contact" type="Contact" default="{ 'sobjectType': 'Contact' }" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <article>
+    <b>Name</b> : <force:outputField value="{!v.contact.Name}"/><br/>
+    <b>AccountId</b> : <force:outputField value="{!v.contact.Account.Id}"/><br/>
+    <b>Account Name</b> : <force:outputField value="{!v.contact.Account.Name}"/><br/>
+    <b>Account Industry</b> : <force:outputField value="{!v.contact.Account.Industry}"/>
+    </article>
+</aura:component>

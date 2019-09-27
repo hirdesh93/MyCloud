@@ -1,0 +1,12 @@
+<apex:page controller="apextojavascript" showHeader="false">
+
+  <apex:form >
+  <script>
+    function closeWin() {
+       window.top.close();
+    }
+</script>
+<apex:outputText value="{!calltoclose}" escape="false"></apex:outputText>
+<apex:commandButton action="{!close}" value="Close"/>
+  </apex:form>
+</apex:page>

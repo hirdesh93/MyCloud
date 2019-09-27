@@ -1,0 +1,12 @@
+<apex:page standardController="Account" showHeader="true" recordSetVar="Accounts">
+    <apex:form >
+    <apex:repeat value="{!account}" var="a">
+       <li>
+           <apex:outputLink value="/{!a.ID}" >
+         <apex:outputText value="{!a.Name}"/>
+       </apex:outputLink>
+            </li>
+    </apex:repeat>
+        <apex:outputLink value="Site.Prefix()/AssignmentvfPage">test</apex:outputLink>
+        </apex:form>
+</apex:page>

@@ -1,0 +1,18 @@
+<apex:page standardController="Account">
+    <apex:form >
+    <apex:slds />
+    <div class="slds-col slds-col--padded sls-p-top--large">
+        <div area-labelledby="allcamping">
+            <fieldset class="slds-box slds-theme--default slds-container--small">
+                <legend id="allcamping" class="slds-text-heading--small slds-p-vertical--medium">Account</legend>
+             </fieldset>
+        </div>
+        <label class="slds-form-element__label" for="text-input"></label>
+  <div class="slds-form-element__control">
+    <input id="text-input" class="slds-input" type="text" placeholder="Account Name" value="{!Account.Name}"/>
+  </div>
+    </div>
+        <div class="slds-form-element">
+  </div>
+        </apex:form>
+</apex:page>

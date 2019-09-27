@@ -1,0 +1,89 @@
+<apex:page standardController="Customer_Loan_Form__c" extensions="LoanFormController" docType="html-5.0" lightningStylesheets="True">
+    <apex:form >
+        <script>
+        function doValidation(){
+            if(!$('input[id$=myField]').val()){
+                var Hir = document.createElement('div');
+                Hir.id = 'girdesh';
+                Hir.style.color = 'red';
+                Hir.innerHTML ="Please Enter Value";
+                $('input[id$=myField]').attr('style','border-color : red');
+                if(!document.getElementById('girdesh'))
+                $('input[id$=myField]').parent().append(Hir);
+            }else{
+            	callsave();
+            }
+            if(!$('input[id$=Name]').val()){
+                var Hir1 = document.createElement('div');
+                Hir1.id = 'girdesh1';
+                Hir1.style.color = 'red';
+                Hir1.innerHTML ="Please Enter Value";
+                $('input[id$=Name]').attr('style','border-color : red');
+                if(!document.getElementById('girdesh1'))
+                $('input[id$=Name]').parent().append(Hir1);
+            }else{
+                callsave();
+            }
+        }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:actionFunction name="callsave" action="{!saveAttachment}"/>
+                <apex:commandButton value="Save" style="color:Blue" onclick="doValidation();return false;"/>
+                <apex:commandButton action="{!Cancel}" value="Cancel" style="color:Blue" onclick="doValidation();" immediate="false"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="2" title="Customer Information">
+                <apex:inputText value="{!cls.Name__c}" id="Name"/>
+                <apex:inputText value="{!cls.Father_s_Husband_Name__c}" id="myField"/>
+                <apex:inputText value="{!cls.PAN_Card__c}"  maxlength="10"/>
+                <apex:inputText value="{!cls.Adhar_Card__c}" maxlength="12"/>
+                <apex:inputText value="{!cls.Mobile_No__c}" />
+                <apex:inputText value="{!cls.Annual_Income__c}"/>
+                <apex:inputText value="{!cls.Email_ID__c}"/>
+                <apex:inputText value="{!cls.Loan_Amount__c}"/>
+                <apex:inputField value="{!cls.Recovery_Date__c}" />
+                <apex:inputText value="{!cls.Address__c}"/>
+               </apex:pageBlockSection>
+            <apex:pageBlockSection title="Image">
+                <apex:inputFile value="{!Image}" id="fileUpload" fileSize="135" /> 
+                <img id="target" class="crop" src="#" alt="your image" style="border:1px solid;display:none;"  />
+                </apex:pageBlockSection>
+        </apex:pageBlock>        
+    </apex:form>
+    <script type="text/javascript">
+    var canvas,fileName;
+    $("[id$='fileUpload']").change(function(){
+        console.log(this);
+        readURL(this);
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            $("#target").css("display", "block");
+            $("#preview").css("display", "block");
+            fileName = input.files[0].name;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#target').attr('src', e.target.result);
+                $('#target').Jcrop({
+                    onChange : updatePreview,
+                    onSelect : updatePreview,
+                    aspectRatio : 1
+                });                    
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function updatePreview(c) {
+        if(parseInt(c.w) > 0) {
+            // Show image preview
+            var imageObj = $("#target")[0];
+            canvas = $("#preview")[0];
+            var context = canvas.getContext("2d");
+            context.drawImage(imageObj, c.x, c.y, c.w, c.h, 0, 0, canvas.width, canvas.height);
+        }
+    };
+    </script>
+</apex:page>
