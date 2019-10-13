@@ -14,5 +14,6 @@
          }
        </script>
     <apex:commandButton onclick="return myFunction()" value="Invoice"/>
+    This is for Testing
   </apex:form>
 </apex:page>
